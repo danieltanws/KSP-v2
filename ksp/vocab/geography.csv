@@ -1,0 +1,64 @@
+value,level,parent_region
+Global,Global,
+Southeast Asia,Region,
+South Asia,Region,
+East Asia,Region,
+Central Asia,Region,
+Oceania,Region,
+Sub-Saharan Africa,Region,
+Middle East & North Africa,Region,
+Europe,Region,
+European Union,Region,
+North America,Region,
+Latin America & Caribbean,Region,
+Indonesia,Country,Southeast Asia
+Malaysia,Country,Southeast Asia
+Singapore,Country,Southeast Asia
+Thailand,Country,Southeast Asia
+Vietnam,Country,Southeast Asia
+Philippines,Country,Southeast Asia
+Cambodia,Country,Southeast Asia
+Laos,Country,Southeast Asia
+Myanmar,Country,Southeast Asia
+Brunei,Country,Southeast Asia
+Timor-Leste,Country,Southeast Asia
+India,Country,South Asia
+Pakistan,Country,South Asia
+Bangladesh,Country,South Asia
+Sri Lanka,Country,South Asia
+Nepal,Country,South Asia
+Bhutan,Country,South Asia
+Maldives,Country,South Asia
+Afghanistan,Country,South Asia
+China,Country,East Asia
+Japan,Country,East Asia
+South Korea,Country,East Asia
+Mongolia,Country,East Asia
+Taiwan,Country,East Asia
+Hong Kong SAR,Country,East Asia
+Australia,Country,Oceania
+New Zealand,Country,Oceania
+Papua New Guinea,Country,Oceania
+Kenya,Country,Sub-Saharan Africa
+Nigeria,Country,Sub-Saharan Africa
+Ethiopia,Country,Sub-Saharan Africa
+Ghana,Country,Sub-Saharan Africa
+South Africa,Country,Sub-Saharan Africa
+Tanzania,Country,Sub-Saharan Africa
+Uganda,Country,Sub-Saharan Africa
+Rwanda,Country,Sub-Saharan Africa
+Egypt,Country,Middle East & North Africa
+Morocco,Country,Middle East & North Africa
+United Arab Emirates,Country,Middle East & North Africa
+Saudi Arabia,Country,Middle East & North Africa
+United Kingdom,Country,Europe
+Germany,Country,Europe
+Netherlands,Country,Europe
+France,Country,Europe
+Poland,Country,Europe
+United States,Country,North America
+Canada,Country,North America
+Brazil,Country,Latin America & Caribbean
+Mexico,Country,Latin America & Caribbean
+Colombia,Country,Latin America & Caribbean
+Peru,Country,Latin America & Caribbean

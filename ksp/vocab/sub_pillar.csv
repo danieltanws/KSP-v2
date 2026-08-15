@@ -1,0 +1,49 @@
+value,level,pillar,parent_p1,impact_statement
+Greenhouse Gas Mitigation,P-1,PLANET,,"Reduced/removed GHG from human activity through nature-based and tech-based solutions, just transitions to clean energy, other carbon mitigation innovations and policies, and scaling up with carbon markets."
+Nature-based Solutions,P-2,PLANET,Greenhouse Gas Mitigation,
+Mitigation Solutions & Policy,P-2,PLANET,Greenhouse Gas Mitigation,
+Carbon Markets,P-2,PLANET,Greenhouse Gas Mitigation,
+Urban Liveability,P-1,PLANET,,"Enhanced urban liveability and quality of living environment through cooling technologies, systems and green cover to combat rising heat, clean water access, proper waste management, and the reduction of harmful pollution."
+Urban Heat,P-2,PLANET,Urban Liveability,
+Water & Waste,P-2,PLANET,Urban Liveability,
+Pollution,P-2,PLANET,Urban Liveability,
+Sustainable Natural Ecosystems,P-1,PLANET,,"Improved sustainability of natural ecosystems on land and in oceans through biodiversity and ecological health, sustainable agriculture and food systems, and the protection of oceans and coastal habitats."
+Biodiversity & Ecosystem Balance,P-2,PLANET,Sustainable Natural Ecosystems,
+Sustainable Agriculture & Food,P-2,PLANET,Sustainable Natural Ecosystems,
+Oceans & Coastal Protection,P-2,PLANET,Sustainable Natural Ecosystems,
+Global Health,P-1,PEOPLE,,"Improved global health through surveillance, early detection, improved access to diagnostics, vaccines and therapeutics, and response planning for zoonotic and vector-borne diseases exacerbated by climate change and growing anti-microbial resistance."
+Zoonotic Diseases,P-2,PEOPLE,Global Health,
+Vector-borne Diseases,P-2,PEOPLE,Global Health,
+Anti-Microbial Resistance,P-2,PEOPLE,Global Health,
+Lifelong Health & Well-being,P-1,PEOPLE,,"Enhanced lifelong health and well-being through improved maternal, neonatal and infant health outcomes, and the reduction of disease burden with better mental health and adequate nutrition."
+Maternity Health & Child Development,P-2,PEOPLE,Lifelong Health & Well-being,
+Mental Health,P-2,PEOPLE,Lifelong Health & Well-being,
+Nutrition & Healthspan,P-2,PEOPLE,Lifelong Health & Well-being,
+Inclusive Development,P-1,PEOPLE,,"Improved inclusive development through greater access to basic and life skills education, school nutrition, and training that enhances employability and entrepreneurship in emerging industries."
+Basic Education & School Nutrition,P-2,PEOPLE,Inclusive Development,
+Inclusive Access & Opportunities,P-2,PEOPLE,Inclusive Development,
+Sustained Livelihoods,P-2,PEOPLE,Inclusive Development,
+Connected Communities,P-1,PEACE,,"Enhanced connectedness between and among communities through youth networks, dialogue among leaders, and the constructive role of media in promoting mutual understanding."
+Youth,P-2,PEACE,Connected Communities,
+Media,P-2,PEACE,Connected Communities,
+Leaders,P-2,PEACE,Connected Communities,
+Engaged & Integrated Society,P-1,PEACE,,"Increased engagement of society through ground-up mutual support, and enhanced integration of diverse communities including those displaced by climate, conflict or economic insecurity."
+Ground-up Mutual Support,P-2,PEACE,Engaged & Integrated Society,
+Integration & Belonging,P-2,PEACE,Engaged & Integrated Society,
+Support for Displaced Persons,P-2,PEACE,Engaged & Integrated Society,
+Identity & Dignity,P-1,PEACE,,"Strengthened sense of identity through the appreciation of and participation in one's own heritage, culture, arts and sports, and support for the dignity of lives of the vulnerable."
+"Heritage, Culture, Arts",P-2,PEACE,Identity & Dignity,
+Sports,P-2,PEACE,Identity & Dignity,
+Dignity of the Vulnerable,P-2,PEACE,Identity & Dignity,
+Strong Institutions,P-1,PROGRESS,,"Strengthened institutions through ethics and good governance in leadership, institutional capabilities and development, and effective multilateral arrangements for local and global communities."
+Governance & Ethics,P-2,PROGRESS,Strong Institutions,
+Institutional Development,P-2,PROGRESS,Strong Institutions,
+Multilateral Arrangements,P-2,PROGRESS,Strong Institutions,
+Transformative Knowledge & Innovation,P-1,PROGRESS,,"Generated transformative knowledge and innovation through research and development, strategic foresight and systems change for impact at scale."
+Research & Development,P-2,PROGRESS,Transformative Knowledge & Innovation,
+Innovations for Scalable Impact,P-2,PROGRESS,Transformative Knowledge & Innovation,
+Insights for Systemic Change,P-2,PROGRESS,Transformative Knowledge & Innovation,
+Catalytic Capital,P-1,PROGRESS,,"Mobilised catalytic capital and innovative funding instruments that deliver sustained impact through blended finance, catalytic philanthropy, strategic partnerships, and social enterprises."
+Catalytic Philanthropy,P-2,PROGRESS,Catalytic Capital,
+Impact/Blended Financing,P-2,PROGRESS,Catalytic Capital,
+Socio-Economic Enterprises,P-2,PROGRESS,Catalytic Capital,

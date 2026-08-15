@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.DS_Store
+
+# ksp/lab/documents/ is deliberately NOT ignored. PRD 4 chose local storage so
+# the whole store stays portable, inspectable and easy to back up, and an
+# ignored documents/ would quietly break that - a fresh clone would have rows
+# whose files are missing, which the integrity check would then report as
+# broken links on every start.
+#
+# If the filed documents turn out to be large or not redistributable, ignore
+# them here instead:
+#     ksp/lab/documents/*
+#     !ksp/lab/documents/.gitkeep
