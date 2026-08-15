@@ -21,7 +21,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from kspcore import coverage, evidence, integrity
+from kspcore import brief, coverage, evidence, integrity, triage
 from kspcore.registry import Registry, render_out_of_scope
 from kspcore.store import Store, repo_root
 from kspcore.vocab import ERROR, Vocab, validate
@@ -107,6 +107,34 @@ def cmd_evidence(args) -> int:
     return 0
 
 
+def cmd_triage(args) -> int:
+    print(triage.run(Registry.load(), args.question))
+    return 0
+
+
+def cmd_brief(args) -> int:
+    store, vocab = _load(args)
+    registry = Registry.load()
+    try:
+        skill = registry.get(args.skill)
+    except KeyError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+    if not skill.available:
+        # Never let brief become a back door around a refusal.
+        print(registry.render_refusal(skill.number))
+        return 1
+    theme, refusal = _resolve_theme(vocab, args.theme)
+    if refusal:
+        print(refusal)
+        return 1
+    if theme is None:
+        print("error: --theme is required", file=sys.stderr)
+        return 2
+    print(brief.run(store, vocab, registry, skill.number, theme, args.geography))
+    return 0
+
+
 def cmd_themes(args) -> int:
     _, vocab = _load(args)
     print("THEMES IN SCOPE")
@@ -130,6 +158,16 @@ def build_parser() -> argparse.ArgumentParser:
     refuse = sub.add_parser("refuse", help="render a NOT IMPLEMENTED block")
     refuse.add_argument("number", type=int)
     refuse.set_defaults(func=cmd_refuse)
+
+    triage_parser = sub.add_parser("triage", help="which analyses fit a question, and are they ready")
+    triage_parser.add_argument("question")
+    triage_parser.set_defaults(func=cmd_triage)
+
+    brief_parser = sub.add_parser("brief", help="evidence brief for a POC skill")
+    brief_parser.add_argument("--skill", type=int, required=True)
+    brief_parser.add_argument("--theme")
+    brief_parser.add_argument("--geography")
+    brief_parser.set_defaults(func=cmd_brief)
 
     for name, func, helptext in (
         ("coverage", cmd_coverage, "skill #1 - what the store holds"),

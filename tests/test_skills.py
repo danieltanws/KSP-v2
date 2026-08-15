@@ -24,14 +24,14 @@ def water(vocab):
 
 
 def test_folder_rows_never_reach_a_query(demo):
-    assert len(demo.sources) == 7
-    assert len(demo.documents()) == 6
+    assert len(demo.sources) == 10
+    assert len(demo.documents()) == 9
     assert all(row["record_type"] == "Document" for row in demo.documents())
 
 
 def test_theme_filters_on_the_focus_area(demo, pollution, water):
     assert len(filter_sources(demo, pollution).documents) == 4
-    assert len(filter_sources(demo, water).documents) == 2
+    assert len(filter_sources(demo, water).documents) == 5
 
 
 def test_sibling_focus_areas_do_not_bleed_together(demo, pollution, water):

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pytest
 
-from kspcore import coverage, evidence, integrity
+from kspcore import brief, coverage, evidence, integrity, triage
 from kspcore.registry import Registry, render_out_of_scope
 
 
@@ -35,7 +35,17 @@ def rendered(demo, empty, vocab) -> list[tuple[str, str]]:
     outputs += [
         (f"refusal/{s.number}", registry.render_refusal(s.number))
         for s in registry.skills
-        if not s.implemented
+        if not s.available
+    ]
+    outputs += [
+        (f"brief/{s.number}", brief.run(demo, vocab, registry, s.number, water))
+        for s in registry.skills
+        if s.is_poc
+    ]
+    outputs += [
+        ("triage/ready", triage.run(registry, "which water solutions work but haven't spread?")),
+        ("triage/blocked", triage.run(registry, "is the funding response the right size?")),
+        ("triage/nomatch", triage.run(registry, "tell me about semiconductors")),
     ]
     return outputs
 
@@ -65,7 +75,7 @@ def test_no_output_is_ever_empty(rendered):
 def test_every_outcome_is_labelled(rendered):
     """A reader must be able to tell a refusal from a finding at a glance."""
     labelled = ("RESULT", "NO DATA", "NOT IMPLEMENTED", "OUT OF SCOPE",
-                "INTEGRITY CHECK", "SKILL REGISTRY", "EVIDENCE BRIEF")
+                "INTEGRITY CHECK", "SKILL REGISTRY", "EVIDENCE BRIEF", "ROUTING")
     for where, text in rendered:
         assert text.split("\n", 1)[0].startswith(labelled), f"{where} has no outcome label"
 
@@ -82,6 +92,12 @@ def test_absence_is_never_stated_as_fact_about_the_world(rendered):
 
 def test_thin_evidence_is_disclosed_rather_than_withheld(demo, vocab):
     """PRD 6.5 rule 6. No coverage threshold - produce the result and disclose."""
-    text = coverage.run(demo, vocab, vocab.theme["Water & Waste"], "Vietnam")
-    assert "NO DATA" not in text, "one document is thin, but it is not no data"
-    assert "LAB documents          1" in text
+    from kspcore.query import filter_sources
+
+    theme = vocab.theme["Water & Waste"]
+    held = len(filter_sources(demo, theme, "Vietnam").documents)
+    assert held < 5, "fixture should stay thin here, or this test proves nothing"
+
+    text = coverage.run(demo, vocab, theme, "Vietnam")
+    assert "NO DATA" not in text, "a handful of documents is thin, but it is not no data"
+    assert f"LAB documents          {held}" in text

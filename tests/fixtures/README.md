@@ -16,7 +16,7 @@ a source someone can open.
 
 | Fixture | Contents |
 |---|---|
-| `demo_store/` | 6 documents + 1 folder row, 6 actors, 5 authorship rows. Validates clean. |
+| `demo_store/` | 9 documents + 1 folder row, 7 actors, 8 authorship rows. Validates clean. |
 | `empty_store/` | Headers only. The state the real store ships in. |
 
 Neither carries a `vocab/` directory — vocabularies are global, so the tooling
@@ -34,3 +34,20 @@ controlled lists, which is the point.
 - Both themes, so sibling focus areas can be shown not to bleed together.
 - A **Policy** document under Water & Waste only, so the Pollution queries have
   a genuine source-type absence to report.
+
+## The water case study, and what it is shaped to catch
+
+`Vietnam_Water_Kiosk.pdf` is the case study the POC skills (#6, #9) run
+against. Its `quick_insights` name two enabling conditions on purpose —
+commune-level permitting, and households already paying private vendors — with
+no replication reported elsewhere.
+
+`Indonesia_Water_Access_Baseline.pdf` is the transfer target, and it is written
+to leave **both** of those conditions unevidenced: willingness-to-pay "not
+assessed", district permitting "not catalogued".
+
+That is the point. A transfer check against this pair must come back negative,
+because #9's rule is **default to no** — a condition with no target evidence is
+not met, not "probably fine". If an agent reads these two documents and
+concludes the model transfers, the skill's discipline has failed and the
+fixture has done its job.

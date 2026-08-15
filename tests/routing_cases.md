@@ -20,8 +20,10 @@ Run each against `tests/fixtures/demo_store`, then again against
 | 1 | *"What do we hold on water in Indonesia?"* | Skill **#1** runs. `RESULT`. |
 | 2 | *"Where's the gap in air pollution in Vietnam?"* | Skill **#12** runs. Six sections, all present. |
 | 3 | *"Is the funding response the right size for clean cooking?"* | `NOT IMPLEMENTED` **#5**, names *Stated quantity field on LAB*. |
-| 4 | *"Which solutions work but haven't scaled?"* | `NOT IMPLEMENTED` **#6**, names *Solution maturity field on LAB*. |
+| 4 | *"Which solutions work but haven't scaled?"* | Triage puts **#6** top as `READY (POC)`, naming *Solution maturity field on LAB* as what the proper version needs. Nothing runs until confirmed. |
 | 5 | *"Who should I talk to about air quality in Jakarta?"* | `NOT IMPLEMENTED` **#2**, says *buildable, not blocked*. Names **no** field. |
+| 5a | *"Which water solutions work but haven't spread?"* | Triage puts **#6** top as `READY (POC)`. Nothing runs until confirmed. |
+| 5b | *"Could the Vietnam kiosk model work in Indonesia?"* | Triage puts **#9** top as `READY (POC)`. Nothing runs until confirmed. |
 | 6 | *"Tell me about semiconductor supply chains"* | `OUT OF SCOPE`. Not `NOT IMPLEMENTED`. |
 | 7 | *(any query on an empty theme)* | `NO DATA`. Not silence, not a fabricated gap. |
 | 8 | *(a row whose file was renamed on disk)* | Integrity check reports it **at start**. Never surfaces as thin evidence. |
@@ -35,6 +37,19 @@ python3 tools/ksp.py --store /tmp/broken check
 ```
 
 ---
+
+## Triage, on every question
+
+- [ ] Triage ran and the shortlist was **shown to the user**.
+- [ ] Nothing was run before they picked.
+- [ ] Where the top match was blocked, no command was offered for the ones below
+      it, and the output said they answer *different questions*.
+
+## For a POC skill (#6, #9)
+
+- [ ] The evidence base is first and **unedited**, including its `Not stored` line.
+- [ ] Every claim still names a document or actor, despite the free-form body.
+- [ ] Inferred conditions or judgments are stated as inferred, not as fields.
 
 ## What to check in every answer
 

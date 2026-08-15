@@ -31,7 +31,8 @@ for judgment.
 
 ## The design in one line
 
-**Sixteen analyses are declared. Two are implemented. Fourteen refuse by name.**
+**Sixteen analyses are declared. Two are implemented, two are POC, twelve refuse
+by name.**
 
 Each refusal names the field that would unlock it, which turns user demand into
 a build roadmap: what people keep asking for is what to build next.
@@ -54,14 +55,60 @@ Implemented skills that may be relevant: Coverage check (#1), Gap analysis (#12)
 
 ---
 
+## Triage — what would answer this?
+
+Ask what analysis fits before running one. It suggests and stops; you pick.
+
+```
+$ python3 tools/ksp.py triage "could the Vietnam kiosk model work in Indonesia?"
+
+ROUTING — "could the Vietnam kiosk model work in Indonesia?"
+
+  ← #9   Transferability  READY (POC)
+        matched: work in
+
+Nothing has been run.
+```
+
+If the closest match is **blocked**, that is the answer — the analyses below it
+answer different questions, and no command is offered for them. A ranked list
+must never become a fallback chain; substituting one analysis for another is
+the single thing this system exists to prevent.
+
+## POC skills
+
+Two analyses (#6 proven-but-unscaled, #9 transferability) are **placeholders**:
+a prompt file in `.claude/skills/ksp/analyses/` and nothing else. No stored
+field, no code. The agent reads the documents and works out the method itself,
+so the output is improvised rather than computed.
+
+The point is modularity. **Adding one is dropping in a file** named `NN-slug.md`
+and setting a status cell to `POC` — no code change. Making it real means adding
+the field it names, writing the analysis, flipping the status to `IMPLEMENTED`,
+and deleting the prompt.
+
+A POC answer carries the same `RESULT` label as a computed one. The evidence
+base is where the difference shows:
+
+```
+EVIDENCE BASE
+  LAB documents          5
+  LEAD actors            3 linked by a matching document
+  Date range             2023–2026
+  Not stored             Enabling conditions list per case study
+                         → identified by reading, not by a field.
+                           Improvised, not computed.
+```
+
 ## Getting started
 
 No install step — Python 3.9+ standard library only.
 
 ```bash
-python3 tools/ksp.py check       # integrity check; run this first, always
-python3 tools/ksp.py registry    # the 16 declared skills
-python3 tools/ksp.py themes      # what is in scope
+python3 tools/ksp.py check                 # integrity check; run this first, always
+python3 tools/ksp.py triage "<question>"   # which analyses fit; runs nothing
+python3 tools/ksp.py registry              # the 16 declared skills
+python3 tools/ksp.py themes                # what is in scope
 ```
 
 The stores ship **empty**. To see the system working, point it at the demo
@@ -73,6 +120,9 @@ python3 tools/ksp.py --store tests/fixtures/demo_store coverage \
 
 python3 tools/ksp.py --store tests/fixtures/demo_store evidence \
     --theme Pollution --geography Indonesia
+
+python3 tools/ksp.py --store tests/fixtures/demo_store brief \
+    --skill 9 --theme "Water & Waste"
 ```
 
 In Claude Code, just ask — the `ksp` skill routes the question, names the skill
@@ -124,8 +174,10 @@ ksp/
 ├── vocab/                  controlled lists - no free text where a list exists
 └── registry/skills.csv     the 16 declarations
 
-tools/ksp.py                check · validate · registry · refuse · coverage · evidence
+tools/ksp.py                check · validate · registry · refuse · triage ·
+                            coverage · evidence · brief
 .claude/skills/ksp/         the routing agent
+.claude/skills/ksp/analyses/  one prompt file per POC skill
 docs/                       specifications; KSP_POC_PRD.md governs
 tests/                      pytest, plus empty and demo fixture stores
 ```
@@ -163,6 +215,9 @@ Read these before quoting any output.
 - **LEAD skews to researchers.** Authors are researchers. Implementers and
   funders rarely publish, so every field looks research-heavy whether or not it
   is.
+- **A POC skill's answer is improvised.** #6 and #9 have no stored field behind
+  them; the agent invents the method by reading. Check the `Not stored` line in
+  the evidence base before quoting either.
 - **The implemented gap analysis (#12) is the weakest of the sixteen** — the
   one most likely to reflect thin reading, and the one readers find most
   convincing. It is implemented first only because it is the only one the
@@ -180,7 +235,7 @@ is the system working correctly.
 ## Development
 
 ```bash
-pytest -q                              # 88 tests
+pytest -q                              # 139 tests
 python3 tools/render_registry_doc.py   # after editing ksp/registry/skills.csv
 ```
 

@@ -1,8 +1,9 @@
 """The registry, and the refusals that are the point of it.
 
-PRD 0: all sixteen analyses are declared, two are implemented, fourteen must
-fail loudly. An unimplemented skill that quietly answers with a different
-analysis is the failure mode the whole system is designed against.
+All sixteen analyses are declared. Two are implemented, two are POC
+placeholders, twelve must fail loudly. An unimplemented skill that quietly
+answers with a different analysis is the failure mode the whole system is
+designed against (PRD 0).
 """
 
 from __future__ import annotations
@@ -11,6 +12,7 @@ import pytest
 
 from kspcore.registry import (
     IMPLEMENTED,
+    POC,
     NO_DATA,
     NOT_IMPLEMENTED,
     OUT_OF_SCOPE,
@@ -33,10 +35,8 @@ MISSING_FIELDS = {
     3: "Code execution + author-count weighting",
     4: "Commitment identification on LAB",
     5: "Stated quantity field on LAB",
-    6: "Solution maturity field on LAB",
     7: "Actor type populated in LEAD",
     8: "Source type field plus 12+ months of collection",
-    9: "Enabling conditions list per case study",
     11: "12+ months of continuous collection",
     13: "Outcome data (does not exist anywhere)",
     14: "Transaction records + historical time series",
@@ -45,6 +45,9 @@ MISSING_FIELDS = {
 }
 
 DEFERRED = {2, 10}
+POC_SKILLS = {6, 9}
+IMPLEMENTED_SKILLS = {1, 12}
+AVAILABLE = POC_SKILLS | IMPLEMENTED_SKILLS
 
 
 @pytest.fixture
@@ -61,12 +64,25 @@ def test_numbering_and_names_match_the_catalogue(registry):
 
 
 def test_exactly_two_are_implemented(registry):
-    assert [s.number for s in registry.implemented()] == [1, 12]
+    assert [s.number for s in registry.implemented()] == sorted(IMPLEMENTED_SKILLS)
+
+
+def test_exactly_two_are_poc(registry):
+    assert {s.number for s in registry.skills if s.is_poc} == POC_SKILLS
+
+
+def test_poc_is_not_counted_as_implemented(registry):
+    """A POC skill is runnable but improvised. Conflating the two would erase
+    the distinction between a computed answer and a guessed one."""
+    for number in POC_SKILLS:
+        skill = registry.get(number)
+        assert skill.available
+        assert not skill.implemented
 
 
 def test_every_other_skill_is_declared_not_implemented(registry):
     for skill in registry.skills:
-        if skill.number not in (1, 12):
+        if skill.number not in AVAILABLE:
             assert skill.status == "NOT IMPLEMENTED", f"#{skill.number}"
 
 
@@ -86,15 +102,40 @@ def test_deferred_skills_say_buildable_and_name_no_field(registry, number):
     assert "It needs:" not in text, "#%d is not blocked by a field" % number
 
 
-@pytest.mark.parametrize("number", [1, 12])
+@pytest.mark.parametrize("number", sorted(IMPLEMENTED_SKILLS))
 def test_implemented_skills_cannot_be_refused(registry, number):
     with pytest.raises(ValueError, match="is implemented"):
         registry.render_refusal(number)
 
 
+@pytest.mark.parametrize("number", sorted(POC_SKILLS))
+def test_poc_skills_cannot_be_refused(registry, number):
+    with pytest.raises(ValueError, match="POC"):
+        registry.render_refusal(number)
+
+
+@pytest.mark.parametrize("number", sorted(POC_SKILLS))
+def test_poc_skills_have_their_prompt_file(registry, number):
+    """A POC skill is its prompt file. Without it there is nothing to run."""
+    from pathlib import Path
+
+    skill = registry.get(number)
+    target = (
+        Path(__file__).resolve().parents[1]
+        / ".claude" / "skills" / "ksp" / "analyses" / skill.prompt_filename
+    )
+    assert target.is_file(), f"#{number} is POC but {skill.prompt_filename} is missing"
+
+
+@pytest.mark.parametrize("number", sorted(POC_SKILLS))
+def test_poc_skills_still_name_the_field_they_lack(registry, number):
+    """It is what the evidence base discloses, so it must survive the flip."""
+    assert registry.get(number).missing_field
+
+
 def test_every_refusal_points_at_the_implemented_alternatives(registry):
     for skill in registry.skills:
-        if skill.implemented:
+        if skill.available:
             continue
         text = registry.render_refusal(skill.number)
         assert "Implemented skills that may be relevant:" in text
@@ -128,7 +169,8 @@ def test_registry_listing_shows_all_sixteen(registry):
     text = registry.render_list()
     for number in range(1, 17):
         assert f"\n{number:>3}  " in text
-    assert text.count(IMPLEMENTED) == 16  # 2 bare + 14 inside "NOT IMPLEMENTED"
+    assert text.count(IMPLEMENTED) == 14  # 2 bare + 12 inside "NOT IMPLEMENTED"
+    assert text.count(f"\n{POC:<16}".strip()) >= 2
 
 
 def test_reference_doc_matches_the_registry(registry):

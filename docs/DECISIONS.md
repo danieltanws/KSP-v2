@@ -104,3 +104,65 @@ explicitly inference at query time with no stored field. It stays with the
 agent. `ksp.py evidence` gathers and counts, then hands over a brief; it never
 classifies, and nothing is cached, because §6.4 names caching as a way of
 hiding the instability rather than fixing it.
+
+---
+
+# Later change: triage, and two POC skills
+
+Taken after the initial build, on the owner's decision.
+
+## What changed
+
+| Before | After |
+|---|---|
+| 2 implemented, 14 refusing | 2 implemented, **2 POC**, 12 refusing |
+| Agent picks a skill and runs it | `ksp.py triage` shortlists first; the agent shows it and **waits** |
+
+#6 (proven but unscaled) and #9 (transferability) became **POC skills**: a
+prompt file in `.claude/skills/ksp/analyses/` and nothing else.
+
+## Why, and what it costs
+
+The purpose is modularity. A POC skill is a placeholder the agent improvises
+against; replacing it with the real analysis is a swap, not a rebuild — proven
+by adding a third POC skill with no code change at all.
+
+This knowingly reverses PRD §0, which says do not implement the fourteen
+because an agent told to attempt them *"will infer from free text and produce
+confident output backed by nothing."* That is precisely what a POC skill does.
+The POC exists to prove the architecture, not the analysis.
+
+Two things keep it honest, and both were free:
+
+- POC skills still get their documents through the same `filter_sources` the
+  computed skills use, so **every claim names its source** still holds.
+- The evidence base goes first and names the field the proper analysis would
+  use, stating that it is not stored.
+
+## The uniform RESULT label
+
+A POC answer carries the same `RESULT` label as #1's counting. Raised as a risk
+— a viewer cannot tell a computed answer from a guessed one — and confirmed by
+the owner.
+
+The evidence base is therefore the **only** remaining signal, which makes its
+`Not stored` line load-bearing rather than decorative. A test asserts it appears
+on every POC skill, and a second asserts it does **not** appear on #12 — a
+disclosure that shows up everywhere would stop meaning anything.
+
+## Output shape for POC skills
+
+Evidence base fixed and first; everything after it free-form. Chosen over the
+full six-section LION shape, which stays normative for #12 only.
+
+## Triage, and the rule it must not break
+
+`ksp.py triage "<question>"` ranks analyses by keyword cues stored in
+`ksp/registry/skills.csv`, shows whether each is ready, and **runs nothing**.
+The shortlist is deterministic so it is reproducible; the choice stays with the
+agent, which is where PRD §6.1 puts routing.
+
+**A ranked list is one step from a fallback chain.** If the closest match is
+blocked, the answer is that analysis and its blocker — never the next one down.
+When the top match is blocked, triage says the ready analyses answer *different
+questions* and offers no command for them. Three tests cover this.

@@ -10,7 +10,7 @@ from kspcore.store import Store
 def test_clean_store_reports_ok(demo):
     report = integrity.check(demo)
     assert report.ok
-    assert len(report.matched) == 6
+    assert len(report.matched) == len(demo.documents())
     assert report.missing == []
     assert report.unfiled == []
 
@@ -47,13 +47,15 @@ def test_gitkeep_is_not_reported_as_unfiled(empty):
 
 
 def test_render_matches_the_specified_format(scratch):
+    store = Store.load(scratch)
+    remaining = len(store.documents()) - 1
     (scratch / "lab" / "documents" / "Heat_PM25_Study.pdf").unlink()
     (scratch / "lab" / "documents" / "Stray.pdf").write_text("x", encoding="utf-8")
 
     text = integrity.check(Store.load(scratch)).render()
 
     assert text.startswith("INTEGRITY CHECK\n")
-    assert "  ✓ 5 rows matched to files" in text
+    assert f"  ✓ {remaining} rows matched to files" in text
     assert "  ✗ 1 row references a missing file:" in text
     assert "Heat_PM25_Study.pdf" in text
     assert "(row: Heat and PM2.5 compound exposure study)" in text

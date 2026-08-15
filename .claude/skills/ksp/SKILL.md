@@ -6,7 +6,8 @@ description: Answer questions against the KSP stores (LEAD actors, LAB documents
 # KSP — routing agent
 
 You answer questions against two local stores by choosing **one** of sixteen
-declared analyses. Two are implemented. Fourteen must refuse.
+declared analyses. Two are implemented, two are POC placeholders, twelve must
+refuse.
 
 > **The one behaviour that matters most.** If the right analysis is not
 > implemented, refuse, name the missing field, and stop. Do not substitute a
@@ -32,13 +33,34 @@ If it reports missing files, **say so before answering**. A row whose file was
 renamed is a row you cannot open, and if you do not surface it now it reaches
 the user as thin evidence instead of as an error.
 
-### 2. Work out theme, geography, and analysis
+### 2. Triage the question, and show the user
+
+```bash
+python3 tools/ksp.py triage "<their question, verbatim>"
+```
+
+This lists the analyses that fit and whether each is ready. It runs nothing.
+
+**Show the user the shortlist and wait for them to pick.** Do not run an
+analysis off the back of triage without confirmation. If the shortlist is
+obviously right you may say which you would choose and why — but still wait.
+
+The ranking is a suggestion from keyword cues, not a decision. If it looks
+wrong, say so and choose differently; you are the router, triage is a
+shortlist.
+
+> **The shortlist is not a fallback chain.** If the closest match is blocked,
+> the answer is that analysis and its blocker. The ones below it answer
+> *different questions* — running one instead is a substitution, which is the
+> single thing this system exists to prevent.
+
+### 3. Work out theme, geography, and analysis
 
 - **Theme** — `Pollution` or `Water & Waste`. Nothing else is in scope.
 - **Geography** — optional. Must be a value in `ksp/vocab/geography.csv`.
-- **Analysis** — pick one from the registry (`references/registry.md`).
+- **Analysis** — from the registry (`references/registry.md`).
 
-### 3. Out of scope? Refuse.
+### 4. Out of scope? Refuse.
 
 If the question is not about Pollution or Water & Waste:
 
@@ -50,7 +72,7 @@ That prints the `OUT OF SCOPE` block. Keep it distinct from `NOT IMPLEMENTED`
 — no field would unlock it, and implying otherwise misdirects the reader about
 what to build.
 
-### 4. Not implemented? Refuse, and name the blocker.
+### 5. Not implemented? Refuse, and name the blocker.
 
 ```bash
 python3 tools/ksp.py refuse <number>
@@ -62,12 +84,31 @@ offer to "have a look anyway".
 The refusal names the blocker because that turns every refusal into a signal
 about what to build next — demand becomes observable instead of guessed.
 
-### 5. Implemented? Run it.
+### 6. Available? Run it.
+
+**Implemented — real analysis behind them:**
 
 - **#1 Coverage check** → `references/skill-01-coverage-check.md`
 - **#12 Gap analysis** → `references/skill-12-gap-analysis.md`
 
-### 6. State which skill you chose. Every time.
+**POC — a prompt and nothing else:**
+
+- **#6 Proven but unscaled** → `analyses/06-proven-but-unscaled.md`
+- **#9 Transferability** → `analyses/09-transferability.md`
+
+```bash
+python3 tools/ksp.py brief --skill <n> --theme "<theme>" --geography "<geography>"
+```
+
+A POC skill has no stored field behind it. You read the documents in the brief
+and work out the method yourself. The evidence base block goes **first,
+unedited** — it names the field the proper analysis would use and says it is
+not stored, which is the only place a reader can tell an improvised answer from
+a computed one. Everything after it is yours to shape.
+
+The hard rules still bind, above all: **every claim names its source.**
+
+### 7. State which skill you chose. Every time.
 
 Never route silently. Open with the skill name and number.
 
@@ -147,13 +188,34 @@ so a water question can return waste-focused documents. Say so when it does.
 
 ```bash
 python3 tools/ksp.py check                                  # integrity - run first, always
+python3 tools/ksp.py triage "<question>"                    # which analyses fit; runs nothing
 python3 tools/ksp.py validate                               # rows against the vocabularies
 python3 tools/ksp.py registry                               # all 16 declared skills
 python3 tools/ksp.py refuse 5                               # a NOT IMPLEMENTED block
 python3 tools/ksp.py themes                                 # in-scope themes
-python3 tools/ksp.py coverage --theme Pollution --geography Indonesia
-python3 tools/ksp.py evidence --theme Pollution --geography Indonesia
+python3 tools/ksp.py coverage --theme Pollution --geography Indonesia     # #1
+python3 tools/ksp.py evidence --theme Pollution --geography Indonesia     # #12
+python3 tools/ksp.py brief --skill 9 --theme "Water & Waste"              # any POC skill
 ```
 
 Add `--store <path>` to run against a different store, such as
 `tests/fixtures/demo_store`.
+
+---
+
+## Adding a POC skill
+
+Any of the twelve refusing analyses can become a POC skill without code:
+
+1. Write `.claude/skills/ksp/analyses/NN-slug.md` — what the analysis is for,
+   what traps it has, and that the method is the agent's to work out. The
+   filename is `NN` zero-padded plus the skill name lowercased and hyphenated.
+2. Set that skill's `status` cell to `POC` in `ksp/registry/skills.csv`.
+3. Run `python3 tools/render_registry_doc.py`.
+
+It then appears in triage as `READY (POC)` and works with `brief`. Leave
+`missing_field` populated — that is what the evidence base discloses.
+
+Going the other way, a POC skill becomes real by adding the field it names,
+writing the analysis in `tools/kspcore/`, flipping the status to
+`IMPLEMENTED`, and deleting the prompt file.

@@ -25,6 +25,11 @@ OUT_OF_SCOPE = "OUT OF SCOPE"
 
 IMPLEMENTED = "IMPLEMENTED"
 
+#: A placeholder skill: a prompt file, no stored field and no Python behind it.
+#: The agent works out the method by reading the documents. Deliberately vague -
+#: the POC proves the architecture, and the real analysis swaps in later.
+POC = "POC"
+
 
 @dataclass
 class Skill:
@@ -37,10 +42,34 @@ class Skill:
     note: str
     caveat: str
     relevant_implemented: list[int]
+    question_cues: list[str]
 
     @property
     def implemented(self) -> bool:
         return self.status == IMPLEMENTED
+
+    @property
+    def is_poc(self) -> bool:
+        return self.status == POC
+
+    @property
+    def available(self) -> bool:
+        """Runnable now, whether by code or by prompt. The opposite of refused."""
+        return self.implemented or self.is_poc
+
+    @property
+    def slug(self) -> str:
+        keep = [c.lower() if c.isalnum() else "-" for c in self.name]
+        return "".join(keep).strip("-").replace("--", "-")
+
+    @property
+    def prompt_filename(self) -> str:
+        """Convention, not configuration: analyses/06-proven-but-unscaled.md.
+
+        Adding a POC skill is dropping in a file of this name and setting the
+        status cell to POC. No code change.
+        """
+        return f"{self.number:02d}-{self.slug}.md"
 
     @property
     def deferred(self) -> bool:
@@ -67,6 +96,7 @@ class Registry:
                 note=row["note"],
                 caveat=row["caveat"],
                 relevant_implemented=[int(n) for n in split_multi(row["relevant_implemented"])],
+                question_cues=split_multi(row.get("question_cues", "")),
             )
             for row in read_csv(target)
         ]
@@ -80,6 +110,10 @@ class Registry:
     def implemented(self) -> list[Skill]:
         return [s for s in self.skills if s.implemented]
 
+    def available(self) -> list[Skill]:
+        """Everything runnable now - implemented or POC."""
+        return [s for s in self.skills if s.available]
+
     def label(self, number: int) -> str:
         skill = self.get(number)
         return f"{skill.name} (#{skill.number})"
@@ -87,21 +121,34 @@ class Registry:
     # -- rendering ---------------------------------------------------------
 
     def render_list(self) -> str:
+        implemented = len(self.implemented())
+        poc = len([s for s in self.skills if s.is_poc])
+        refused = len(self.skills) - implemented - poc
         lines = [
-            "SKILL REGISTRY — 16 declared, 2 implemented",
+            f"SKILL REGISTRY — {len(self.skills)} declared, {implemented} implemented, "
+            f"{poc} POC, {refused} refusing",
             "",
             f"{'#':>3}  {'Status':<16} {'Skill':<32} Blocker",
             f"{'—' * 3}  {'—' * 16} {'—' * 32} {'—' * 40}",
         ]
         for skill in self.skills:
-            if skill.implemented:
-                blocker = "—"
-            elif skill.deferred:
-                blocker = "buildable, not yet built"
-            else:
-                blocker = skill.missing_field
-            lines.append(f"{skill.number:>3}  {skill.status:<16} {skill.name:<32} {blocker}")
+            lines.append(
+                f"{skill.number:>3}  {skill.status:<16} {skill.name:<32} {self._blocker(skill)}"
+            )
+        lines += [
+            "",
+            "POC = a prompt file, no stored field behind it. The agent works out the method.",
+            "Its 'blocker' is what the proper version would need.",
+        ]
         return "\n".join(lines)
+
+    @staticmethod
+    def _blocker(skill: Skill) -> str:
+        if skill.implemented:
+            return "—"
+        if skill.deferred:
+            return "buildable, not yet built"
+        return skill.missing_field
 
     def render_markdown(self) -> str:
         """The reference table in references/registry.md.
@@ -110,10 +157,14 @@ class Registry:
         which is the thing the refusals are actually rendered from. A test
         fails if the committed file falls out of step.
         """
+        implemented = len(self.implemented())
+        poc = len([s for s in self.skills if s.is_poc])
+        refused = len(self.skills) - implemented - poc
         lines = [
             "# Skill registry",
             "",
-            "**Sixteen analyses declared. Two implemented. Fourteen refuse by name.**",
+            f"**{len(self.skills)} analyses declared. {implemented} implemented, "
+            f"{poc} POC, {refused} refuse by name.**",
             "",
             "Numbering matches `docs/KSP_Analysis_Catalogue.md`.",
             "",
@@ -124,19 +175,26 @@ class Registry:
             "|---|---|---|---|",
         ]
         for skill in self.skills:
-            if skill.implemented:
-                blocker = "—"
-                name = f"**{skill.name}**"
-                status = "**IMPLEMENTED**"
-            else:
-                name = skill.name
-                status = skill.status
-                blocker = "*buildable, not yet built*" if skill.deferred else skill.missing_field
+            blocker = self._blocker(skill)
+            if skill.deferred:
+                blocker = f"*{blocker}*"
+            name = f"**{skill.name}**" if skill.available else skill.name
+            status = f"**{skill.status}**" if skill.available else skill.status
             lines.append(f"| {skill.number} | {name} | {status} | {blocker} |")
 
         lines += [
             "",
-            "## Why the fourteen refuse",
+            "## POC skills",
+            "",
+            "A **POC** skill is a prompt file in `.claude/skills/ksp/analyses/` and nothing",
+            "else — no stored field, no Python. The agent reads the documents and works out",
+            "the method itself, so its output is improvised rather than computed. The",
+            "`Blocker` column shows what the proper version would need.",
+            "",
+            "**Adding one is dropping in a file** named `NN-slug.md` and setting the status",
+            "cell in `ksp/registry/skills.csv` to `POC`. No code change.",
+            "",
+            f"## Why the {refused} refuse",
             "",
             "Each refusal names the field that would unlock it. That turns user demand",
             "into a build roadmap: what people keep asking for is what to build next.",
@@ -158,9 +216,10 @@ class Registry:
     def render_refusal(self, number: int) -> str:
         """The NOT IMPLEMENTED block. Must never read like a finding."""
         skill = self.get(number)
-        if skill.implemented:
+        if skill.available:
+            how = "implemented" if skill.implemented else "available as a POC skill"
             raise ValueError(
-                f"Skill #{number} ({skill.name}) is implemented - run it, do not refuse it"
+                f"Skill #{number} ({skill.name}) is {how} - run it, do not refuse it"
             )
 
         lines = [f"{NOT_IMPLEMENTED} — {skill.name} (#{skill.number})", ""]
