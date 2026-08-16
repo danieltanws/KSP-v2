@@ -71,14 +71,14 @@ def test_actors_are_tied_to_a_theme_through_named_documents(demo, pollution):
 
 def test_actor_reached_only_through_a_global_document_is_kept_apart(demo, pollution):
     match = filter_actors(demo, pollution, "Indonesia")
-    assert [a["name"] for a, _ in match.via_global_only] == ["World Bank"]
-    assert "World Bank" not in {a["name"] for a, _ in match.by_document}
+    assert [a["name"] for a, _ in match.via_global_only] == ["A Global Funder"]
+    assert "A Global Funder" not in {a["name"] for a, _ in match.by_document}
 
 
 def test_manual_actor_without_a_document_is_not_counted_as_theme_evidence(demo, pollution):
     match = filter_actors(demo, pollution, "Southeast Asia")
-    assert "Clean Air Fund" in {a["name"] for a in match.geography_only}
-    assert "Clean Air Fund" not in {a["name"] for a, _ in match.by_document}
+    assert "An Untagged Fund" in {a["name"] for a in match.geography_only}
+    assert "An Untagged Fund" not in {a["name"] for a, _ in match.by_document}
 
 
 def test_authorship_role_is_derived_from_position(demo):
@@ -215,8 +215,8 @@ def test_a_tagged_actor_with_no_document_is_theme_evidence(demo, water):
     """LEAD exists largely for implementers and funders who never publish.
     Before the tag column they could not reach a theme at all."""
     match = filter_actors(demo, water, "Indonesia")
-    assert [a["name"] for a in match.by_tag] == ["Helena Thybell"]
-    assert "Helena Thybell" not in {a["name"] for a, _ in match.by_document}
+    assert [a["name"] for a in match.by_tag] == ["A Tagged Advocate"]
+    assert "A Tagged Advocate" not in {a["name"] for a, _ in match.by_document}
 
 
 def test_a_tagged_actor_is_never_merged_into_the_document_count(demo, water):
@@ -231,10 +231,10 @@ def test_a_tag_does_not_override_geography(demo, water):
 
 
 def test_an_untagged_manual_actor_stays_geography_only(demo, pollution):
-    """Clean Air Fund is deliberately left untagged, so both paths stay covered."""
+    """The untagged fund is deliberately left so, so both paths stay covered."""
     match = filter_actors(demo, pollution, "Southeast Asia")
-    assert "Clean Air Fund" in {a["name"] for a in match.geography_only}
-    assert "Clean Air Fund" not in {a["name"] for a in match.by_tag}
+    assert "An Untagged Fund" in {a["name"] for a in match.geography_only}
+    assert "An Untagged Fund" not in {a["name"] for a in match.by_tag}
 
 
 def test_a_document_backed_actor_never_falls_through_to_by_tag(demo, water):
@@ -250,7 +250,7 @@ def test_output_reports_the_tag_bucket_and_cites_the_basis(demo, vocab, water):
 
     text = brief.run(demo, vocab, Registry.load(), 9, water, "Indonesia")
     assert "tagged with this focus area, no document" in text
-    assert "SIWI staff page, checked 29 Jul" in text
+    assert "Organisation staff page, checked 29 Jul" in text
 
 
 def test_coverage_reports_the_tag_bucket_apart(demo, vocab, water):
@@ -282,4 +282,4 @@ def test_source_url_is_surfaced_when_present(demo, vocab, water):
     from kspcore.registry import Registry
 
     text = brief.run(demo, vocab, Registry.load(), 9, water)
-    assert "https://example.org/synthetic/mekong-water-kiosks" in text
+    assert "https://example.org/synthetic/water-kiosks" in text

@@ -198,8 +198,11 @@ python3 tools/ksp.py evidence --theme Pollution --geography Indonesia     # #12
 python3 tools/ksp.py brief --skill 9 --theme "Water & Waste"              # any POC skill
 ```
 
-Add `--store <path>` to run against a different store, such as
-`tests/fixtures/demo_store`.
+Add `--store <path>` to run against a different store directory.
+
+**The store ships empty.** Until documents are filed, every skill returns
+`NO DATA` with an explanation. Report that as it stands — it describes the
+store, never the world — and do not fill the silence with anything else.
 
 ---
 

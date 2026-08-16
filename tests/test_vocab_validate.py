@@ -30,7 +30,7 @@ def messages(problems):
     return " | ".join(p.message for p in problems)
 
 
-def test_demo_store_is_clean(demo, vocab):
+def test_the_built_test_store_is_clean(demo, vocab):
     assert validate(demo, vocab) == []
 
 

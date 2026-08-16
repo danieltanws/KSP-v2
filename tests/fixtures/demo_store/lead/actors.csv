@@ -1,9 +1,0 @@
-id,name,form,actor_type,affiliation_id,source_files,pillar,p1_cluster,p2_focus_area,geography,origin,basis,date_added
-1,Jane Smith,Person,Researcher,3,Heat_PM25_Study.pdf,,,,Indonesia;Southeast Asia,From LAB,,2026-08-14
-2,Wei Chen,Person,Researcher,3,Heat_PM25_Study.pdf,,,,Indonesia;Southeast Asia,From LAB,,2026-08-14
-3,Institute of Environmental Health,Organisation,Researcher,,Jakarta_Air_Quality_Review.pdf,,,,Indonesia;Southeast Asia,From LAB,,2026-08-14
-4,World Bank,Organisation,Funder,,Clean_Cooking_Outcome_Bond.pdf,,,,Global,From LAB,,2026-08-14
-5,Clean Air Fund,Organisation,,,,,,,Southeast Asia,Manual,"Named by a colleague as active on regional air quality, checked 14 Aug",2026-08-14
-6,Mekong River Commission,Organisation,Government,,Mekong_Water_Security.pdf,,,,Vietnam;Southeast Asia,From LAB,,2026-08-14
-7,Delta Water Cooperative Union,Organisation,Implementer,,Vietnam_Water_Kiosk.pdf,,,,Vietnam;Southeast Asia,From LAB,,2026-08-15
-8,Helena Thybell,Person,Advocate,,,PLANET,Urban Liveability,Water & Waste,Indonesia;Southeast Asia,Manual,"SIWI staff page, checked 29 Jul",2026-08-16

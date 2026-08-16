@@ -8,8 +8,14 @@ Everything the tooling *can* verify mechanically is covered in `pytest`:
 refusal text, missing-field naming, outcome labels, counts, folder exclusion,
 integrity, empty-store handling.
 
-Run each against `tests/fixtures/demo_store`, then again against
-`tests/fixtures/empty_store`.
+**Run these against the real store**, which ships empty. That is the state a
+stakeholder will most likely be watching, and the one where the system has to
+behave: `NO DATA` with an explanation, a clean refusal, never silence and never
+an invented finding.
+
+There is no sample store to run against instead. One existed and was twice
+mistaken for real data; test stores are now built inside the test suite. To
+exercise a case with documents present, file real ones.
 
 ---
 
@@ -25,16 +31,13 @@ Run each against `tests/fixtures/demo_store`, then again against
 | 5a | *"Which water solutions work but haven't spread?"* | Triage puts **#6** top as `READY (POC)`. Nothing runs until confirmed. |
 | 5b | *"Could the Vietnam kiosk model work in Indonesia?"* | Triage puts **#9** top as `READY (POC)`. Nothing runs until confirmed. |
 | 6 | *"Tell me about semiconductor supply chains"* | `OUT OF SCOPE`. Not `NOT IMPLEMENTED`. |
-| 7 | *(any query on an empty theme)* | `NO DATA`. Not silence, not a fabricated gap. |
+| 7 | *(any query, empty store)* | `NO DATA`. Not silence, not a fabricated gap. Covered mechanically in `test_empty_store.py`. |
 | 8 | *(a row whose file was renamed on disk)* | Integrity check reports it **at start**. Never surfaces as thin evidence. |
 
-Case 8 setup:
-
-```bash
-cp -r tests/fixtures/demo_store /tmp/broken
-mv /tmp/broken/lab/documents/Heat_PM25_Study.pdf /tmp/broken/lab/documents/Heat_v2.pdf
-python3 tools/ksp.py --store /tmp/broken check
-```
+Case 8 needs a filed document to rename, so it only applies once the store has
+one. `tests/test_integrity.py` covers the mechanics; this checks the agent
+surfaces the break *before* answering rather than letting it read as thin
+evidence.
 
 ---
 
