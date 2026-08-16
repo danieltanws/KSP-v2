@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regenerate docs/CONTROLLED_VALUES.md from ksp/vocab/.
+"""Regenerate outputs/CONTROLLED_VALUES.md from ksp/vocab/.
 
 The ingest spec is handed to people and agents outside this repo, so the list
 of allowed values has to travel with it as a readable document. Generating it
@@ -17,7 +17,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from kspcore.store import read_csv, repo_root
 
 VOCAB = repo_root() / "ksp" / "vocab"
-TARGET = repo_root() / "docs" / "CONTROLLED_VALUES.md"
+TARGET = repo_root() / "outputs" / "CONTROLLED_VALUES.md"
 
 SIMPLE = [
     ("pillar.csv", "Pillar", "`pillar` on sources.csv. Multi-select."),

@@ -137,8 +137,8 @@ another agent — needs two documents, handed over together:
 
 | Document | What it is |
 |---|---|
-| `docs/INGEST_SPEC.md` | Column-by-column spec for all three CSVs, the rules, and a pre-handover checklist |
-| `docs/CONTROLLED_VALUES.md` | Every permitted value. Generated from `ksp/vocab/`, so it cannot drift |
+| `outputs/INGEST_SPEC.md` | Column-by-column spec for all three CSVs, the rules, and a pre-handover checklist |
+| `outputs/CONTROLLED_VALUES.md` | Every permitted value. Generated from `ksp/vocab/`, so it cannot drift |
 
 Both are written to be read without any other context. Validate the result with
 `ksp.py validate` and `ksp.py check` before accepting it.
@@ -196,7 +196,8 @@ tools/ksp.py                check · validate · registry · refuse · triage ·
 .claude/skills/ksp/         the routing agent
 .claude/skills/ksp/analyses/  one prompt file per POC skill
 docs/                       specifications; KSP_POC_PRD.md governs
-                            INGEST_SPEC.md + CONTROLLED_VALUES.md for bulk loading
+outputs/                    what this agent produces - INGEST_SPEC.md and
+                            CONTROLLED_VALUES.md for bulk loading
 tests/                      pytest, plus empty and demo fixture stores
 ```
 
@@ -253,7 +254,7 @@ is the system working correctly.
 ## Development
 
 ```bash
-pytest -q                              # 161 tests
+pytest -q                              # 164 tests
 python3 tools/render_registry_doc.py   # after editing ksp/registry/skills.csv
 python3 tools/render_vocab_doc.py      # after editing anything in ksp/vocab/
 ```
