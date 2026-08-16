@@ -17,9 +17,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 
 from kspcore.store import read_csv, repo_root  # noqa: E402
 
-DOCS = repo_root() / "docs"
-SPEC = DOCS / "INGEST_SPEC.md"
-VALUES = DOCS / "CONTROLLED_VALUES.md"
+OUTPUTS = repo_root() / "outputs"
+SPEC = OUTPUTS / "INGEST_SPEC.md"
+VALUES = OUTPUTS / "CONTROLLED_VALUES.md"
 
 
 @pytest.fixture
@@ -34,6 +34,31 @@ def values() -> str:
 
 def header_of(path: Path) -> str:
     return path.read_text(encoding="utf-8").splitlines()[0]
+
+
+# -- where these documents live --------------------------------------------
+
+
+def test_handoff_documents_live_in_outputs():
+    """`docs/` is documentation about this system; these two are a work package
+    handed outward. Anything this agent produces goes to `outputs/`."""
+    assert SPEC.is_file(), "INGEST_SPEC.md is not in outputs/"
+    assert VALUES.is_file(), "CONTROLLED_VALUES.md is not in outputs/"
+
+
+def test_they_are_not_left_behind_in_docs():
+    for stale in ("INGEST_SPEC.md", "CONTROLLED_VALUES.md"):
+        path = repo_root() / "docs" / stale
+        assert not path.exists(), f"docs/{stale} is back - two copies will drift"
+
+
+def test_the_generator_writes_to_outputs():
+    """If TARGET still pointed at docs/, running the generator would recreate a
+    second copy there and the two would diverge silently."""
+    sys.path.insert(0, str(repo_root() / "tools"))
+    import render_vocab_doc  # noqa: PLC0415
+
+    assert render_vocab_doc.TARGET == VALUES
 
 
 # -- the spec quotes the real headers --------------------------------------

@@ -88,13 +88,29 @@ ksp/registry/skills.csv   the 16 declarations
 .claude/skills/ksp/analyses/  POC skill prompts - one file per POC skill
 tools/ksp.py              CLI - check, validate, registry, refuse, triage,
                           coverage, evidence, brief
-docs/                     the specifications; two are normative.
-                          INGEST_SPEC.md is the handover doc for bulk loading
+docs/                     the specifications; two are normative
+outputs/                  what this agent produces - INGEST_SPEC.md is the
+                          handover doc for bulk loading
 tests/                    pytest, plus fixture stores
 ```
 
 `python3 tools/ksp.py check` runs automatically at session start via
 `.claude/settings.json`, and must run before any question is answered.
+
+### Where things go
+
+Every file this agent creates has one of three homes. Route by what the file
+**is**, not by what produced it.
+
+| Folder | Holds |
+|---|---|
+| `docs/` | Documentation about this system, for whoever maintains it |
+| `ksp/` | The stores — LAB, LEAD, and LION if it is ever built |
+| **`outputs/`** | Everything else |
+
+**Write a file only when asked.** Answering a question does not produce one.
+Auto-saving every skill run would retain gaps between runs, which the POC
+deliberately excludes — see the accepted costs below.
 
 ---
 
@@ -102,13 +118,13 @@ tests/                    pytest, plus fixture stores
 
 - **Python: standard library only.** The stores are CSV so they open in a
   spreadsheet; the tooling should run anywhere with no install step.
-- **Tests:** `pytest -q` from the repo root. 161 tests, all fast.
+- **Tests:** `pytest -q` from the repo root. 164 tests, all fast.
 - **After editing `ksp/registry/skills.csv`,** run
   `python3 tools/render_registry_doc.py` — a test fails otherwise.
 - **After editing anything in `ksp/vocab/`,** run
   `python3 tools/render_vocab_doc.py` — a test fails otherwise. The generated
-  `docs/CONTROLLED_VALUES.md` is handed to external ingest agents, so it must
-  never disagree with the validator.
+  `outputs/CONTROLLED_VALUES.md` is handed to external ingest agents, so it
+  must never disagree with the validator.
 - **The real store ships empty.** Test data lives in `tests/fixtures/`, never
   in `ksp/`. Fabricated rows in the real store would destroy the one thing this
   system is for.
