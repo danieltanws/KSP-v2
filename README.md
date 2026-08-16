@@ -205,6 +205,7 @@ tools/ksp.py                check · validate · registry · refuse · triage ·
                             coverage · evidence · brief
 .claude/skills/ksp/         the routing agent
 .claude/skills/ksp/analyses/  one prompt file per POC skill
+.claude/skills/ksp-file/    filing skill - a document's LAB metadata
 docs/                       specifications; KSP_POC_PRD.md governs
 outputs/                    what this agent produces - INGEST_SPEC.md and
                             CONTROLLED_VALUES.md for bulk loading
