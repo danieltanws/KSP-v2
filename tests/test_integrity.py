@@ -74,8 +74,9 @@ def test_document_row_with_no_file_is_an_error(scratch):
     write_rows(
         scratch / "lab" / "sources.csv",
         SOURCE_HEADER,
-        [["Orphan row", "", "Document", "d", "", "PLANET", "Pollution",
-          "Indonesia", "Research", "Someone", "2024", "", "2026-08-14"]],
+        [["Orphan row", "", "Document", "d", "", "PLANET", "Urban Liveability",
+          "Pollution", "Indonesia;Southeast Asia", "Research", "Someone", "",
+          "2024", "", "2026-08-14"]],
     )
 
     report = integrity.check(Store.load(scratch))

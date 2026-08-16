@@ -83,7 +83,7 @@ Full text and reasoning: `.claude/skills/ksp/references/hard-rules.md`.
 ksp/lab/sources.csv       one row per document; files live in lab/documents/
 ksp/lead/actors.csv       actors, mandatory stable ID
 ksp/lead/authorship.csv   one row per person per document
-ksp/vocab/                controlled lists - no free text where a list exists
+ksp/vocab/                controlled lists - taxonomy.csv holds the whole 4P tree
 ksp/registry/skills.csv   the 16 declarations
 .claude/skills/ksp/analyses/  POC skill prompts - one file per POC skill
 tools/ksp.py              CLI - check, validate, registry, refuse, triage,
@@ -118,7 +118,7 @@ deliberately excludes — see the accepted costs below.
 
 - **Python: standard library only.** The stores are CSV so they open in a
   spreadsheet; the tooling should run anywhere with no install step.
-- **Tests:** `pytest -q` from the repo root. 164 tests, all fast.
+- **Tests:** `pytest -q` from the repo root. 182 tests, all fast.
 - **After editing `ksp/registry/skills.csv`,** run
   `python3 tools/render_registry_doc.py` — a test fails otherwise.
 - **After editing anything in `ksp/vocab/`,** run
@@ -146,6 +146,7 @@ Decided deliberately. Adding features to solve them makes the system worse.
 | A POC answer looks like a computed one | Owner decision. The evidence base carries the distinction. |
 | The one implemented gap analysis is the weakest of the 16 | It is the only one the current fields support. Section 1 disclosure is the mitigation. |
 | Triage ranks on keyword cues, not meaning | It is a shortlist, not a decision. The agent routes; cues only surface candidates. |
+| A tagged actor is weaker evidence than a document-backed one | True, and why the buckets stay separate. Merging them would overstate the response side. |
 
 ### Out of scope — do not build
 

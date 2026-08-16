@@ -55,11 +55,12 @@ def write_rows(path: Path, header: list[str], rows: list[list[str]]) -> None:
 
 
 ACTOR_HEADER = [
-    "id", "name", "form", "actor_type", "affiliation_id",
-    "source_files", "geography", "origin", "basis", "date_added",
+    "id", "name", "form", "actor_type", "affiliation_id", "source_files",
+    "pillar", "p1_cluster", "p2_focus_area", "geography", "origin", "basis",
+    "date_added",
 ]
 SOURCE_HEADER = [
     "name", "file", "record_type", "description", "quick_insights", "pillar",
-    "sub_pillar", "geography", "source_type", "publisher", "year_published",
-    "total_author_count", "date_added",
+    "p1_cluster", "p2_focus_area", "geography", "source_type", "publisher",
+    "source_url", "year_published", "total_author_count", "date_added",
 ]

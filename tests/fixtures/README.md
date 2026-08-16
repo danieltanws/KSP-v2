@@ -16,7 +16,7 @@ a source someone can open.
 
 | Fixture | Contents |
 |---|---|
-| `demo_store/` | 9 documents + 1 folder row, 7 actors, 8 authorship rows. Validates clean. |
+| `demo_store/` | 9 documents + 1 folder row, 8 actors, 8 authorship rows. Validates clean. |
 | `empty_store/` | Headers only. The state the real store ships in. |
 
 Neither carries a `vocab/` directory — vocabularies are global, so the tooling
@@ -28,8 +28,12 @@ controlled lists, which is the point.
 - A **folder row** with every field blank, to prove folder rows never reach a query.
 - A document tagged **`Global`**, to prove global documents and the actors
   reached only through them are counted separately from a country.
-- An actor with **only a basis** and no source link (Clean Air Fund), to prove
-  geography-only actors are not counted as theme evidence.
+- An actor with **only a basis**, no source link and **no topic tag** (Clean Air
+  Fund), to prove an untagged manual actor stays a geography match only.
+- An actor with **a topic tag and no document** (Helena Thybell), the case that
+  motivated the tag column: found on a website, tagged by hand, and therefore
+  counted as theme evidence citing her basis rather than a document.
+- A `source_url` on two rows, pointing at `example.org` so nobody follows it.
 - An **organisation as author** (World Bank), the no-named-author rule.
 - Both themes, so sibling focus areas can be shown not to bleed together.
 - A **Policy** document under Water & Waste only, so the Pollution queries have

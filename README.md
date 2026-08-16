@@ -157,6 +157,11 @@ row is joined to its file by filename and nothing else.
 Required: `name`, `file`, `record_type`, `description`, `pillar`, `geography`,
 `source_type`, `publisher`.
 
+Tagging is three columns — `pillar`, `p1_cluster`, `p2_focus_area` — and the
+chain must be consistent: a focus area filed under the wrong cluster is an
+error. Where a source is a web page, **save the file and record `source_url`**;
+a URL alone leaves the claim uncheckable once the link rots.
+
 **Do not rename a document after filing.** LAB has no stable IDs — the row and
 the file are joined by a string match and nothing else, so a rename breaks the
 link. The integrity check catches it; the habit avoids it.

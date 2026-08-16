@@ -102,7 +102,7 @@ def test_controlled_values_doc_is_up_to_date():
 
 @pytest.mark.parametrize(
     "filename",
-    ["pillar.csv", "source_type.csv", "record_type.csv", "actor_form.csv",
+    ["source_type.csv", "record_type.csv", "actor_form.csv",
      "actor_type.csv", "origin.csv"],
 )
 def test_every_simple_vocabulary_value_appears(values, filename):
@@ -110,12 +110,14 @@ def test_every_simple_vocabulary_value_appears(values, filename):
         assert row["value"] in values, f"{filename}: '{row['value']}' is missing"
 
 
-def test_all_36_focus_areas_appear(values):
-    sub = read_csv(repo_root() / "ksp" / "vocab" / "sub_pillar.csv")
-    focus = [r["value"] for r in sub if r["level"] == "P-2"]
-    assert len(focus) == 36
-    for value in focus:
-        assert value in values, f"focus area '{value}' is missing"
+def test_the_whole_taxonomy_appears(values):
+    tree = read_csv(repo_root() / "ksp" / "vocab" / "taxonomy.csv")
+    by_level = {}
+    for row in tree:
+        by_level.setdefault(row["level"], []).append(row["value"])
+    assert (len(by_level["P"]), len(by_level["P-1"]), len(by_level["P-2"])) == (4, 12, 36)
+    for row in tree:
+        assert row["value"] in values, f"{row['level']} '{row['value']}' is missing"
 
 
 def test_all_geography_values_appear(values):
@@ -148,9 +150,22 @@ def test_spec_warns_that_filenames_are_the_key(spec):
     assert "Nothing may be renamed after filing" in text
 
 
-def test_spec_states_both_levels_of_each_hierarchy(spec):
+def test_spec_states_the_three_taxonomy_columns(spec):
+    for column in ("`pillar`", "`p1_cluster`", "`p2_focus_area`"):
+        assert column in spec
+    # The chain rule is the thing a crawler will otherwise get wrong.
+    assert "chain must be consistent" in " ".join(spec.split())
+
+
+def test_spec_states_geography_carries_both_levels(spec):
     assert "Indonesia;Southeast Asia" in spec
-    assert "Pollution;Urban Liveability" in spec
+
+
+def test_spec_requires_the_file_as_well_as_the_url(spec):
+    """A URL alone leaves a claim uncheckable once the link rots."""
+    text = " ".join(spec.split())
+    assert "record it *as well as* the file, never instead" in text
+    assert "A URL alone is not enough" in text
 
 
 def test_spec_names_the_two_in_scope_themes(spec):

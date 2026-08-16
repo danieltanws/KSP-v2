@@ -3,13 +3,13 @@
 Shared by skill #1 (coverage) and skill #12 (gap analysis) so both count the
 same rows the same way.
 
-**Theme matches on P-2, never P-1.** In the Temasek Trust taxonomy the two
-in-scope themes are siblings inside one P-1 cluster:
+**Theme matches the ``p2_focus_area`` column.** In the Temasek Trust taxonomy
+the two in-scope themes are siblings inside one P-1 cluster:
 
     PLANET → Urban Liveability → { Urban Heat, Water & Waste, Pollution }
 
-Filtering on the cluster would sweep in Urban Heat and quietly widen every
-answer, so the match is always against the P-2 focus area.
+Matching the cluster instead would sweep in Urban Heat. Since P-2 has its own
+column, that mistake is now unavailable rather than merely forbidden.
 
 **Geography matches exactly** on the stored multi-select. A document about
 Indonesia carries both ``Indonesia`` and ``Southeast Asia`` (PRD 3), and the
@@ -45,12 +45,23 @@ class SourceMatch:
 
 @dataclass
 class ActorMatch:
+    """Four buckets, four strengths of evidence. Never merge them.
+
+    LEAD exists largely to hold the implementers and funders who never publish,
+    so an actor must be able to reach a theme without a document. But a
+    hand-typed tag is weaker evidence than a named document, and reporting the
+    two together would overstate the response side.
+    """
+
     #: Actors linked by a document specific to the queried geography. Traceable.
     by_document: list[tuple[dict, list[str]]] = field(default_factory=list)
     #: Actors reached only through a Global document. Counted apart for the same
     #: reason global documents are: they do not evidence presence *here*.
     via_global_only: list[tuple[dict, list[str]]] = field(default_factory=list)
-    #: Actors matching the geography with no document tying them to the theme.
+    #: Actors whose own p2_focus_area matches, with no matching document. Their
+    #: claim cites their `basis`, which the row-creation rule guarantees exists.
+    by_tag: list[dict] = field(default_factory=list)
+    #: Actors matching the geography with no document and no matching tag.
     geography_only: list[dict] = field(default_factory=list)
 
     def __len__(self) -> int:
@@ -58,7 +69,8 @@ class ActorMatch:
 
 
 def matches_theme(row: dict, theme: dict) -> bool:
-    return theme["p2_focus_area"] in split_multi(row.get("sub_pillar"))
+    """True when a row - source or actor - carries the theme's focus area."""
+    return theme["p2_focus_area"] in split_multi(row.get("p2_focus_area"))
 
 
 def matches_geography(row: dict, geography: str | None) -> bool:
@@ -105,9 +117,10 @@ def filter_actors(
     they are linked to, which is what makes the connection citable - the
     evidence for "this actor works on this" is a named document.
 
-    Actors with no linked document (manual rows with only a basis) can only be
-    matched on geography. They are returned separately, never merged into the
-    document-backed count.
+    An actor with no linked document can still carry the theme's focus area in
+    their own ``p2_focus_area`` - that is how a manually-added implementer or
+    funder reaches a theme at all. Those land in ``by_tag``, cited by their
+    ``basis``, and are never merged into the document-backed count.
     """
     match = ActorMatch()
     if sources is None:
@@ -124,6 +137,8 @@ def filter_actors(
                 match.via_global_only.append((actor, overlap))
             else:
                 match.by_document.append((actor, overlap))
+        elif theme and matches_theme(actor, theme) and matches_geography(actor, geography):
+            match.by_tag.append(actor)
         elif geography and matches_geography(actor, geography):
             match.geography_only.append(actor)
         elif not geography and not linked and theme is None:

@@ -105,7 +105,7 @@ def test_coverage_reports_a_result_with_counts(demo, vocab, pollution):
     assert text.startswith(RESULT)
     assert "LAB documents          2" in text
     assert "BY SOURCE TYPE" in text
-    assert "BY SUB-PILLAR" in text
+    assert "BY FOCUS AREA" in text
 
 
 def test_coverage_states_what_it_describes(demo, vocab, pollution):
@@ -206,3 +206,80 @@ def test_no_warning_when_geography_specific_documents_exist(demo, vocab, polluti
 
 def test_no_geography_means_no_such_warning(demo, vocab, pollution):
     assert "NOTHING SPECIFIC" not in evidence.run(demo, vocab, pollution)
+
+
+# -- actors tagged without a document --------------------------------------
+
+
+def test_a_tagged_actor_with_no_document_is_theme_evidence(demo, water):
+    """LEAD exists largely for implementers and funders who never publish.
+    Before the tag column they could not reach a theme at all."""
+    match = filter_actors(demo, water, "Indonesia")
+    assert [a["name"] for a in match.by_tag] == ["Helena Thybell"]
+    assert "Helena Thybell" not in {a["name"] for a, _ in match.by_document}
+
+
+def test_a_tagged_actor_is_never_merged_into_the_document_count(demo, water):
+    match = filter_actors(demo, water, "Indonesia")
+    assert len(match) == len(match.by_document), "__len__ counts document-backed only"
+    assert match.by_tag, "fixture should have one, or this proves nothing"
+
+
+def test_a_tag_does_not_override_geography(demo, water):
+    """Helena is tagged Water & Waste but writes about Southeast Asia."""
+    assert filter_actors(demo, water, "Kenya").by_tag == []
+
+
+def test_an_untagged_manual_actor_stays_geography_only(demo, pollution):
+    """Clean Air Fund is deliberately left untagged, so both paths stay covered."""
+    match = filter_actors(demo, pollution, "Southeast Asia")
+    assert "Clean Air Fund" in {a["name"] for a in match.geography_only}
+    assert "Clean Air Fund" not in {a["name"] for a in match.by_tag}
+
+
+def test_a_document_backed_actor_never_falls_through_to_by_tag(demo, water):
+    match = filter_actors(demo, water, "Vietnam")
+    backed = {a["name"] for a, _ in match.by_document}
+    assert backed, "fixture should have document-backed water actors"
+    assert backed & {a["name"] for a in match.by_tag} == set()
+
+
+def test_output_reports_the_tag_bucket_and_cites_the_basis(demo, vocab, water):
+    from kspcore import brief
+    from kspcore.registry import Registry
+
+    text = brief.run(demo, vocab, Registry.load(), 9, water, "Indonesia")
+    assert "tagged with this focus area, no document" in text
+    assert "SIWI staff page, checked 29 Jul" in text
+
+
+def test_coverage_reports_the_tag_bucket_apart(demo, vocab, water):
+    text = coverage.run(demo, vocab, water, "Indonesia")
+    assert "tagged with this focus area but" in text
+
+
+# -- the cluster no longer bleeds into the focus area ----------------------
+
+
+def test_filtering_a_cluster_is_a_different_question_from_a_focus_area(demo):
+    """The old trap: Urban Liveability holds Urban Heat as well as the two
+    in-scope themes. With p2 in its own column the two cannot be confused."""
+    from kspcore.store import split_multi
+
+    in_cluster = [
+        r for r in demo.documents()
+        if "Urban Liveability" in split_multi(r.get("p1_cluster"))
+    ]
+    pollution_only = [
+        r for r in demo.documents()
+        if "Pollution" in split_multi(r.get("p2_focus_area"))
+    ]
+    assert len(in_cluster) > len(pollution_only)
+
+
+def test_source_url_is_surfaced_when_present(demo, vocab, water):
+    from kspcore import brief
+    from kspcore.registry import Registry
+
+    text = brief.run(demo, vocab, Registry.load(), 9, water)
+    assert "https://example.org/synthetic/mekong-water-kiosks" in text
