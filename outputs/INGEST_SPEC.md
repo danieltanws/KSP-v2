@@ -39,28 +39,43 @@ Indonesia;Southeast Asia
 No spaces around the semicolon. No quotes unless the cell also contains a
 comma, in which case use standard CSV quoting.
 
-## Rule 2 — hierarchical fields carry both levels
+## Rule 2 — the 4P taxonomy is three columns
 
-Two fields are hierarchical, and both work the same way: **tag the specific
-value and its parent, in the same cell.**
+Three levels, **one column each**, on both tables:
 
-| Field | Specific | Parent | Cell |
-|---|---|---|---|
-| geography | Indonesia | Southeast Asia | `Indonesia;Southeast Asia` |
-| sub_pillar | Pollution | Urban Liveability | `Pollution;Urban Liveability` |
+| Column | Example |
+|---|---|
+| `pillar` | `PLANET` |
+| `p1_cluster` | `Urban Liveability` |
+| `p2_focus_area` | `Pollution` |
+
+Each P-2 focus area belongs to exactly one P-1 cluster, and each cluster to
+exactly one pillar. **The chain must be consistent.** Putting `Pollution` under
+`Global Health` is a validation error, not a style lapse — it asserts a
+relationship the taxonomy does not contain.
+
+Values are not interchangeable between columns. `Urban Liveability` is a
+cluster; writing it in `p2_focus_area` is rejected.
+
+## Rule 3 — geography carries both levels in one cell
+
+Unlike the taxonomy, geography stays a single multi-select — its values are not
+a strict tree, since a document can be about Indonesia and Kenya at once.
+
+**Tag the country and its region together:** `Indonesia;Southeast Asia`.
 
 A document about a whole region carries just the region: `Southeast Asia`.
 A document about the world carries `Global` alone.
 
-Omitting the parent produces a validation warning, not an error — but do not
-rely on that. Grouping fragments when the convention is not followed.
+Omitting the region produces a warning, not an error — but do not rely on that.
+Grouping fragments when the convention is not followed.
 
 ---
 
 # File 1 — `ksp/lab/sources.csv`
 
 ```
-name,file,record_type,description,quick_insights,pillar,sub_pillar,geography,source_type,publisher,year_published,total_author_count,date_added
+name,file,record_type,description,quick_insights,pillar,p1_cluster,p2_focus_area,geography,source_type,publisher,source_url,year_published,total_author_count,date_added
 ```
 
 | Column | Required | Controlled | What goes in it |
@@ -70,11 +85,13 @@ name,file,record_type,description,quick_insights,pillar,sub_pillar,geography,sou
 | `record_type` | **Yes** | `record_type.csv` | `Document` or `Folder` |
 | `description` | **Yes** | — | What the document is. One or two sentences. Factual, not evaluative. |
 | `quick_insights` | No | — | The substantive claims, with figures. See below — this field does more work than its name suggests. |
-| `pillar` | **Yes** | `pillar.csv` | `PLANET` / `PEOPLE` / `PROGRESS` / `PEACE`. Multi-select. |
-| `sub_pillar` | No | `sub_pillar.csv` | P-2 focus area **and** its P-1 cluster. Multi-select. |
+| `pillar` | **Yes** | `taxonomy.csv` | `PLANET` / `PEOPLE` / `PROGRESS` / `PEACE`. Multi-select. |
+| `p1_cluster` | No | `taxonomy.csv` | The P-1 cluster. Multi-select. Must be consistent with `p2_focus_area`. |
+| `p2_focus_area` | No | `taxonomy.csv` | The P-2 focus area. Multi-select. |
 | `geography` | **Yes** | `geography.csv` | What the document is **about**, not where it was published. Country **and** region. Multi-select. |
 | `source_type` | **Yes** | `source_type.csv` | `Research` / `Policy` / `Media` / `Industry` / `Internal` |
 | `publisher` | **Yes** | partly | A publisher name, or `Internal`, or `Unknown`. **Never `Not Found`.** |
+| `source_url` | No | — | Where the document came from. Must start `http://` or `https://`. See below. |
 | `year_published` | No | — | Four digits. Blank if genuinely unknown — do not guess. |
 | `total_author_count` | No | — | Whole number. Recorded for later network weighting; nothing uses it yet. |
 | `date_added` | No | — | `YYYY-MM-DD`, the date you filed it |
@@ -116,6 +133,19 @@ If the source repository has folder entries, they may be filed with
 `record_type = Folder` and every other column blank. They are excluded from all
 queries. If you can simply skip folders, do that instead.
 
+### `source_url` — record it *as well as* the file, never instead
+
+Where a source is a web page, **save it into `ksp/lab/documents/` and record
+the URL.** Both.
+
+The file is the evidence: it is what the integrity check verifies and what a
+reader opens to check a claim. The URL is provenance — it says where the file
+came from and lets someone re-find the original.
+
+A URL alone is not enough. Links rot, pages get rewritten, and a claim whose
+only support has moved is a claim that can no longer be checked. That is the
+failure this whole system is built to prevent.
+
 ### The `file` column, and where documents live
 
 A LAB row is joined to its document **by filename and nothing else.** There are
@@ -141,7 +171,7 @@ design, and it is not something to work around by inventing a URL column.
 # File 2 — `ksp/lead/actors.csv`
 
 ```
-id,name,form,actor_type,affiliation_id,source_files,geography,origin,basis,date_added
+id,name,form,actor_type,affiliation_id,source_files,pillar,p1_cluster,p2_focus_area,geography,origin,basis,date_added
 ```
 
 | Column | Required | Controlled | What goes in it |
@@ -152,6 +182,7 @@ id,name,form,actor_type,affiliation_id,source_files,geography,origin,basis,date_
 | `actor_type` | No | `actor_type.csv` | `Researcher` / `Implementer` / `Funder` / `Government` / `Advocate` / `Other`. Leave blank rather than guessing. |
 | `affiliation_id` | No | — | The `id` of the organisation this person belongs to. **People only** — setting it on an Organisation is an error. |
 | `source_files` | No | — | Semicolon-separated LAB filenames this actor is tied to |
+| `pillar` / `p1_cluster` / `p2_focus_area` | No | `taxonomy.csv` | What this actor works on. Same three columns and the same chain rule as sources. See below. |
 | `geography` | No | `geography.csv` | Inherited from the document. Means what they **write about**, not where they are based. |
 | `origin` | **Yes** | `origin.csv` | `From LAB` for anything harvested from a document. `Manual` for hand-entered rows. |
 | `basis` | No | — | Why this row exists, when there is no source. E.g. *"LinkedIn profile, checked 14 Aug"* |
@@ -164,6 +195,17 @@ The validator rejects anything less.
 
 A row that is only a name looks like knowledge and is not — six months on,
 nobody can reconstruct why it is there.
+
+### Tagging an actor who has no document
+
+An actor is normally tied to a theme through the documents they are linked to.
+An actor with no document — someone found on a website, named by a colleague,
+known from a directory — reaches a theme **only** through their own
+`p2_focus_area` tag.
+
+Tag them if you know what they work on. Left blank, they will show up as a
+geography match and nothing more, which for an implementer or a funder means
+effectively invisible. That population is much of the reason LEAD exists.
 
 ### Where a document has no named author
 
@@ -261,8 +303,10 @@ it accurately where it applies; queries will not reach it.
 - [ ] Every `file` value corresponds to a real file in `ksp/lab/documents/`
 - [ ] Filenames are unique store-wide and final — nothing will be renamed
 - [ ] No `publisher` cell contains `Not Found`
+- [ ] Every web source has **both** a saved file and a `source_url`
+- [ ] Every P/P-1/P-2 chain is consistent
 - [ ] Every actor row has a source or a basis
-- [ ] Hierarchical fields carry both levels
+- [ ] Geography carries both country and region
 - [ ] No columns were added
 - [ ] Any value you wanted but could not find in the vocabularies is listed
       separately for the store owner, not invented

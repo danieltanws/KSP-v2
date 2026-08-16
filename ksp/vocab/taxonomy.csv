@@ -1,4 +1,5 @@
 value,level,pillar,parent_p1,impact_statement
+PLANET,P,PLANET,,
 Greenhouse Gas Mitigation,P-1,PLANET,,"Reduced/removed GHG from human activity through nature-based and tech-based solutions, just transitions to clean energy, other carbon mitigation innovations and policies, and scaling up with carbon markets."
 Nature-based Solutions,P-2,PLANET,Greenhouse Gas Mitigation,
 Mitigation Solutions & Policy,P-2,PLANET,Greenhouse Gas Mitigation,
@@ -11,6 +12,7 @@ Sustainable Natural Ecosystems,P-1,PLANET,,"Improved sustainability of natural e
 Biodiversity & Ecosystem Balance,P-2,PLANET,Sustainable Natural Ecosystems,
 Sustainable Agriculture & Food,P-2,PLANET,Sustainable Natural Ecosystems,
 Oceans & Coastal Protection,P-2,PLANET,Sustainable Natural Ecosystems,
+PEOPLE,P,PEOPLE,,
 Global Health,P-1,PEOPLE,,"Improved global health through surveillance, early detection, improved access to diagnostics, vaccines and therapeutics, and response planning for zoonotic and vector-borne diseases exacerbated by climate change and growing anti-microbial resistance."
 Zoonotic Diseases,P-2,PEOPLE,Global Health,
 Vector-borne Diseases,P-2,PEOPLE,Global Health,
@@ -23,18 +25,7 @@ Inclusive Development,P-1,PEOPLE,,"Improved inclusive development through greate
 Basic Education & School Nutrition,P-2,PEOPLE,Inclusive Development,
 Inclusive Access & Opportunities,P-2,PEOPLE,Inclusive Development,
 Sustained Livelihoods,P-2,PEOPLE,Inclusive Development,
-Connected Communities,P-1,PEACE,,"Enhanced connectedness between and among communities through youth networks, dialogue among leaders, and the constructive role of media in promoting mutual understanding."
-Youth,P-2,PEACE,Connected Communities,
-Media,P-2,PEACE,Connected Communities,
-Leaders,P-2,PEACE,Connected Communities,
-Engaged & Integrated Society,P-1,PEACE,,"Increased engagement of society through ground-up mutual support, and enhanced integration of diverse communities including those displaced by climate, conflict or economic insecurity."
-Ground-up Mutual Support,P-2,PEACE,Engaged & Integrated Society,
-Integration & Belonging,P-2,PEACE,Engaged & Integrated Society,
-Support for Displaced Persons,P-2,PEACE,Engaged & Integrated Society,
-Identity & Dignity,P-1,PEACE,,"Strengthened sense of identity through the appreciation of and participation in one's own heritage, culture, arts and sports, and support for the dignity of lives of the vulnerable."
-"Heritage, Culture, Arts",P-2,PEACE,Identity & Dignity,
-Sports,P-2,PEACE,Identity & Dignity,
-Dignity of the Vulnerable,P-2,PEACE,Identity & Dignity,
+PROGRESS,P,PROGRESS,,
 Strong Institutions,P-1,PROGRESS,,"Strengthened institutions through ethics and good governance in leadership, institutional capabilities and development, and effective multilateral arrangements for local and global communities."
 Governance & Ethics,P-2,PROGRESS,Strong Institutions,
 Institutional Development,P-2,PROGRESS,Strong Institutions,
@@ -47,3 +38,16 @@ Catalytic Capital,P-1,PROGRESS,,"Mobilised catalytic capital and innovative fund
 Catalytic Philanthropy,P-2,PROGRESS,Catalytic Capital,
 Impact/Blended Financing,P-2,PROGRESS,Catalytic Capital,
 Socio-Economic Enterprises,P-2,PROGRESS,Catalytic Capital,
+PEACE,P,PEACE,,
+Connected Communities,P-1,PEACE,,"Enhanced connectedness between and among communities through youth networks, dialogue among leaders, and the constructive role of media in promoting mutual understanding."
+Youth,P-2,PEACE,Connected Communities,
+Media,P-2,PEACE,Connected Communities,
+Leaders,P-2,PEACE,Connected Communities,
+Engaged & Integrated Society,P-1,PEACE,,"Increased engagement of society through ground-up mutual support, and enhanced integration of diverse communities including those displaced by climate, conflict or economic insecurity."
+Ground-up Mutual Support,P-2,PEACE,Engaged & Integrated Society,
+Integration & Belonging,P-2,PEACE,Engaged & Integrated Society,
+Support for Displaced Persons,P-2,PEACE,Engaged & Integrated Society,
+Identity & Dignity,P-1,PEACE,,"Strengthened sense of identity through the appreciation of and participation in one's own heritage, culture, arts and sports, and support for the dignity of lives of the vulnerable."
+"Heritage, Culture, Arts",P-2,PEACE,Identity & Dignity,
+Sports,P-2,PEACE,Identity & Dignity,
+Dignity of the Vulnerable,P-2,PEACE,Identity & Dignity,

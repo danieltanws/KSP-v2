@@ -22,10 +22,20 @@ as out of scope — which is not a reason to skip tagging it correctly.
 
 ---
 
-## Sub-pillar — the 4P taxonomy
+## The 4P taxonomy — three columns
 
-Two levels. **Tag the P-2 focus area and its P-1 cluster together**, in one
-cell: `Pollution;Urban Liveability`.
+Three levels, **one column each**, on both `sources.csv` and `actors.csv`:
+
+| Column | Example |
+|---|---|
+| `pillar` | `PLANET` |
+| `p1_cluster` | `Urban Liveability` |
+| `p2_focus_area` | `Pollution` |
+
+Each P-2 belongs to exactly one P-1, and each P-1 to exactly one pillar, so the
+chain must be consistent. Writing a focus area under the wrong cluster is an
+error, not a style lapse. Multi-select still applies within a column:
+`p2_focus_area = Urban Heat;Pollution`.
 
 ### PLANET
 
@@ -118,12 +128,6 @@ just the region. A worldwide document carries `Global` alone.
 ---
 
 ## The remaining lists
-
-### Pillar
-
-`pillar` on sources.csv. Multi-select.
-
-`PLANET`, `PEOPLE`, `PROGRESS`, `PEACE`
 
 ### Source type
 

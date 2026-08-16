@@ -111,18 +111,23 @@ python3 tools/ksp.py registry              # the 16 declared skills
 python3 tools/ksp.py themes                # what is in scope
 ```
 
-The stores ship **empty**. To see the system working, point it at the demo
-fixture:
+**The stores ship empty**, so until you file something every skill returns
+`NO DATA` with an explanation of what it looked for. That is the intended
+behaviour, not a fault — an empty store is never reported as an absence in the
+world.
+
+There is deliberately no sample store to demo against. One existed and was
+twice mistaken for real data, including once when a skill produced a
+confident-looking analysis built entirely on invented documents. In a system
+whose whole premise is that claims trace to sources someone can open, plausible
+fake evidence is a liability. Test data now lives inside the test suite, for
+the length of one test.
+
+Triage, the registry and every refusal work before anything is filed:
 
 ```bash
-python3 tools/ksp.py --store tests/fixtures/demo_store coverage \
-    --theme Pollution --geography Indonesia
-
-python3 tools/ksp.py --store tests/fixtures/demo_store evidence \
-    --theme Pollution --geography Indonesia
-
-python3 tools/ksp.py --store tests/fixtures/demo_store brief \
-    --skill 9 --theme "Water & Waste"
+python3 tools/ksp.py triage "where is the gap in air pollution in Vietnam?"
+python3 tools/ksp.py refuse 5
 ```
 
 In Claude Code, just ask — the `ksp` skill routes the question, names the skill
@@ -156,6 +161,11 @@ row is joined to its file by filename and nothing else.
 
 Required: `name`, `file`, `record_type`, `description`, `pillar`, `geography`,
 `source_type`, `publisher`.
+
+Tagging is three columns — `pillar`, `p1_cluster`, `p2_focus_area` — and the
+chain must be consistent: a focus area filed under the wrong cluster is an
+error. Where a source is a web page, **save the file and record `source_url`**;
+a URL alone leaves the claim uncheckable once the link rots.
 
 **Do not rename a document after filing.** LAB has no stable IDs — the row and
 the file are joined by a string match and nothing else, so a rename breaks the
@@ -198,7 +208,8 @@ tools/ksp.py                check · validate · registry · refuse · triage ·
 docs/                       specifications; KSP_POC_PRD.md governs
 outputs/                    what this agent produces - INGEST_SPEC.md and
                             CONTROLLED_VALUES.md for bulk loading
-tests/                      pytest, plus empty and demo fixture stores
+tests/                      pytest; test stores are built in conftest.py,
+                            never checked in
 ```
 
 ---

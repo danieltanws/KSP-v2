@@ -20,7 +20,6 @@ VOCAB = repo_root() / "ksp" / "vocab"
 TARGET = repo_root() / "outputs" / "CONTROLLED_VALUES.md"
 
 SIMPLE = [
-    ("pillar.csv", "Pillar", "`pillar` on sources.csv. Multi-select."),
     ("source_type.csv", "Source type", "`source_type` on sources.csv. Single value."),
     ("record_type.csv", "Record type", "`record_type` on sources.csv. Single value."),
     ("actor_form.csv", "Actor form", "`form` on actors.csv. Single value."),
@@ -60,14 +59,24 @@ def render() -> str:
         "",
         "---",
         "",
-        "## Sub-pillar — the 4P taxonomy",
+        "## The 4P taxonomy — three columns",
         "",
-        "Two levels. **Tag the P-2 focus area and its P-1 cluster together**, in one",
-        "cell: `Pollution;Urban Liveability`.",
+        "Three levels, **one column each**, on both `sources.csv` and `actors.csv`:",
+        "",
+        "| Column | Example |",
+        "|---|---|",
+        "| `pillar` | `PLANET` |",
+        "| `p1_cluster` | `Urban Liveability` |",
+        "| `p2_focus_area` | `Pollution` |",
+        "",
+        "Each P-2 belongs to exactly one P-1, and each P-1 to exactly one pillar, so the",
+        "chain must be consistent. Writing a focus area under the wrong cluster is an",
+        "error, not a style lapse. Multi-select still applies within a column:",
+        "`p2_focus_area = Urban Heat;Pollution`.",
         "",
     ]
-    sub = read_csv(VOCAB / "sub_pillar.csv")
-    for pillar in [r["value"] for r in read_csv(VOCAB / "pillar.csv")]:
+    sub = read_csv(VOCAB / "taxonomy.csv")
+    for pillar in [r["value"] for r in sub if r["level"] == "P"]:
         out.append(f"### {pillar}")
         out.append("")
         for cluster in [r for r in sub if r["pillar"] == pillar and r["level"] == "P-1"]:

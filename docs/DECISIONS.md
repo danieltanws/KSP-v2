@@ -166,3 +166,71 @@ agent, which is where PRD §6.1 puts routing.
 blocked, the answer is that analysis and its blocker — never the next one down.
 When the top match is blocked, triage says the ready analyses answer *different
 questions* and offers no command for them. Three tests cover this.
+
+---
+
+# Later change: three tagging columns, source URLs, actor tags
+
+Prompted by assessing the original pilot cards (`LAB_LEAD_Pilot_Cards_Water.docx`).
+
+## P / P-1 / P-2 as three columns
+
+LAB previously had `pillar` plus one `sub_pillar` column mixing both lower
+levels (`Pollution;Urban Liveability`). The Trust's taxonomy — and the pilot
+cards, and `TT_Ps.xlsx` — are three explicit levels, so the store now matches:
+`pillar`, `p1_cluster`, `p2_focus_area`, on both `sources.csv` and `actors.csv`.
+
+`pillar.csv` and `sub_pillar.csv` are folded into one **`ksp/vocab/taxonomy.csv`**
+holding the whole tree (52 rows, `level` ∈ P / P-1 / P-2).
+
+**This supersedes "Sub-pillar stays one multi-select field" above**, and it
+retires the hazard recorded beside it. Filtering `Urban Liveability` used to
+sweep in `Urban Heat`; that was managed by a rule and a test. With P-2 in its
+own column the mistake is structurally unavailable, so the rule is no longer
+something anyone has to remember.
+
+It also upgrades validation. Because each P-2 has exactly one parent P-1 and
+each P-1 one pillar, a written chain is checkable: a focus area filed under the
+wrong cluster is now an **error**, where the old parent-missing check could only
+warn. Geography keeps the warning, because its values are not a strict tree — a
+document can be about Indonesia and Kenya at once.
+
+The three columns are formally redundant (P-2 determines the rest), but they
+match the Trust's own sheet and read correctly in a spreadsheet, which is what
+the CSV choice was for.
+
+## `source_url` on LAB
+
+All 20 pilot Signal cards cite a URL and none cites a file. Decision: **record
+both.** The file is the evidence the integrity check verifies and a reader
+opens; the URL is provenance. A URL alone leaves a claim uncheckable the moment
+the link rots, which is the failure the whole system is built against.
+
+Shape-checked only — no fetching, no liveness checking. That would be a scanner,
+which PRD §2 excludes.
+
+## Actor topic tags, and a fourth evidence bucket
+
+An actor previously reached a theme only through linked documents, so anyone
+added from a website or a colleague's tip landed in `geography_only` and never
+counted as theme evidence. That excluded precisely the implementers and funders
+LEAD exists to hold — the ones who never publish.
+
+Actors now carry the same three tagging columns. `ActorMatch` gains **`by_tag`**,
+ordered after `by_document` and `via_global_only` and before `geography_only`.
+
+The buckets stay separate in every output. They are different strengths of
+evidence, and merging a hand-typed tag with a named document would overstate the
+response side. Sourcing still holds: a tagged actor's claim cites their `basis`,
+which the row-creation rule already guarantees exists.
+
+## Not adopted from the pilot cards
+
+Score, Relationship Status, TT Connection, Engagement Status Recommendation,
+Influence Pathway, and the three Evidence types. PRD §12 defers all of them
+until prioritisation for engagement becomes the job.
+
+Also dropped: `Signal Type`, `Time Horizon`, `Why It Matters`, `Watch For`. The
+first is a different axis from `source_type`; `Time Horizon` is forecasting,
+which the PRD refuses on principle; the last two are interpretation the system
+is designed not to store.

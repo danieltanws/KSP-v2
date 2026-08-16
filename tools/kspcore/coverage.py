@@ -55,10 +55,15 @@ def run(store: Store, vocab: Vocab, theme: dict | None, geography: str | None = 
             f"  LEAD actors           +{len(actors.via_global_only)} reached only via a Global "
             "document — not evidence of presence in this geography"
         )
+    if actors.by_tag:
+        lines.append(
+            f"  LEAD actors           +{len(actors.by_tag)} tagged with this focus area but "
+            "backed by no document — cited by their basis"
+        )
     if actors.geography_only:
         lines.append(
             f"  LEAD actors           +{len(actors.geography_only)} matching geography only, "
-            "with no document tying them to this theme"
+            "with no document or tag tying them to this theme"
         )
     if sources.global_documents:
         lines.append(
@@ -74,7 +79,7 @@ def run(store: Store, vocab: Vocab, theme: dict | None, geography: str | None = 
         lines.append(f"  Undated                {undated} document(s) carry no year")
 
     lines.extend(_breakdown("BY SOURCE TYPE", tally(docs, "source_type")))
-    lines.extend(_breakdown("BY SUB-PILLAR", tally(docs, "sub_pillar", multi=True)))
+    lines.extend(_breakdown("BY FOCUS AREA", tally(docs, "p2_focus_area", multi=True)))
     lines.extend(_breakdown("BY GEOGRAPHY", tally(docs, "geography", multi=True)))
     lines.extend(_breakdown("BY PUBLISHER", tally(docs, "publisher")))
 

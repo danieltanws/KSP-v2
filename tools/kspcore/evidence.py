@@ -73,8 +73,10 @@ def run(store: Store, vocab: Vocab, theme: dict, geography: str | None = None) -
     ])
     if actors.via_global_only:
         lines.append(f"  LEAD actors       +{len(actors.via_global_only)} via a Global document only")
+    if actors.by_tag:
+        lines.append(f"  LEAD actors       +{len(actors.by_tag)} tagged with this focus area, no document")
     if actors.geography_only:
-        lines.append(f"  LEAD actors       +{len(actors.geography_only)} geography-only, no document tie")
+        lines.append(f"  LEAD actors       +{len(actors.geography_only)} geography-only, no document or tag")
     if sources.global_documents:
         lines.append(f"  Global documents  +{len(sources.global_documents)} tagged Global, counted separately")
     if earliest is None:
@@ -106,9 +108,14 @@ def run(store: Store, vocab: Vocab, theme: dict, geography: str | None = None) -
         lines.append("  Reached only via a Global document — does not evidence presence here:")
         for actor, via in actors.via_global_only:
             lines.append(f"  • {actor.get('name')} — linked via: {', '.join(via)}")
+    if actors.by_tag:
+        lines.append("")
+        lines.append("  Tagged with this focus area, but no document backs it — cite the basis:")
+        for actor in actors.by_tag:
+            lines.append(f"  • {actor.get('name')} — {actor.get('basis') or 'no basis recorded'}")
     if actors.geography_only:
         lines.append("")
-        lines.append("  Geography-only actors — no document ties them to this theme:")
+        lines.append("  Geography-only actors — no document or tag ties them to this theme:")
         for actor in actors.geography_only:
             basis = actor.get("basis") or "no basis recorded"
             lines.append(f"  • {actor.get('name')} — {basis}")
@@ -140,8 +147,11 @@ def _document_block(row: dict, tag: str = "") -> list[str]:
         f"      file: {row.get('file')}  ·  {row.get('source_type')}  ·  "
         f"{row.get('publisher')}  ·  {year}",
         f"      geography: {row.get('geography')}",
-        f"      sub-pillar: {row.get('sub_pillar') or '(none)'}",
+        f"      focus area: {row.get('p2_focus_area') or '(none)'}"
+        f"  ({row.get('p1_cluster') or 'no cluster'})",
     ]
+    if row.get("source_url"):
+        block.append(f"      source: {row['source_url']}")
     if row.get("description"):
         block.append(f"      description: {row['description']}")
     if row.get("quick_insights"):

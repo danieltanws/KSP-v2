@@ -59,7 +59,7 @@ def test_a_computed_skill_gets_no_not_stored_line(demo, vocab, registry, water):
 @pytest.mark.parametrize("number", POC_SKILLS)
 def test_brief_hands_over_the_documents_to_reason_over(demo, vocab, registry, water, number):
     text = brief.run(demo, vocab, registry, number, water)
-    assert "Community water kiosk programme, Mekong Delta" in text
+    assert "Community water kiosk programme" in text
     assert "Vietnam_Water_Kiosk.pdf" in text
     # Quick insights carry the substance the agent has to work from.
     assert "78% still financially self-sustaining" in text
@@ -108,5 +108,5 @@ def test_prompt_filename_follows_the_convention(registry):
 
 def test_an_implementer_reaches_the_response_side(demo, vocab, registry, water):
     text = brief.run(demo, vocab, registry, 9, water)
-    assert "Delta Water Cooperative Union" in text
+    assert "A Cooperative Union" in text
     assert "Implementer" in text

@@ -4,11 +4,21 @@ Every filter and comparison depends on exact matching (PRD 3). Free text
 forces the agent to re-interpret values at query time, differently each run,
 so the lists below are the only permitted values.
 
-Two of the lists are hierarchical and work the same way: a row carries values
-from both levels in one multi-select cell.
+The 4P taxonomy is three explicit levels, one column each, matching the
+Trust's own structure:
 
-    geography    Indonesia;Southeast Asia      country + its region
-    sub_pillar   Pollution;Urban Liveability   P-2 focus area + its P-1 cluster
+    pillar         PLANET
+    p1_cluster     Urban Liveability
+    p2_focus_area  Pollution
+
+Each P-2 has exactly one parent P-1, and each P-1 exactly one pillar, so the
+chain a row writes is checkable: a mismatched chain is an error, not a style
+lapse. Keeping P-2 in its own column also makes a whole class of mistake
+unavailable - filtering on the cluster can no longer sweep in its siblings.
+
+Geography stays a single multi-select carrying both levels
+(``Indonesia;Southeast Asia``). Its values are not a strict tree - a document
+can be about Indonesia and Kenya at once - so the same treatment would not fit.
 """
 
 from __future__ import annotations
@@ -41,8 +51,8 @@ class Problem:
 @dataclass
 class Vocab:
     root: Path
-    pillar: set[str] = field(default_factory=set)
-    sub_pillar: dict[str, dict] = field(default_factory=dict)
+    #: The whole 4P tree, keyed by value. Rows carry level, pillar, parent_p1.
+    taxonomy: dict[str, dict] = field(default_factory=dict)
     geography: dict[str, dict] = field(default_factory=dict)
     theme: dict[str, dict] = field(default_factory=dict)
     source_type: set[str] = field(default_factory=set)
@@ -58,8 +68,7 @@ class Vocab:
         simple = lambda fn: {r["value"] for r in read_csv(base / fn)}
         return cls(
             root=base,
-            pillar=simple("pillar.csv"),
-            sub_pillar={r["value"]: r for r in read_csv(base / "sub_pillar.csv")},
+            taxonomy={r["value"]: r for r in read_csv(base / "taxonomy.csv")},
             geography={r["value"]: r for r in read_csv(base / "geography.csv")},
             theme={r["theme"]: r for r in read_csv(base / "theme.csv")},
             source_type=simple("source_type.csv"),
@@ -96,6 +105,28 @@ class Vocab:
 
     def theme_names(self) -> list[str]:
         return list(self.theme)
+
+    # -- the 4P taxonomy -----------------------------------------------------
+
+    def at_level(self, level: str) -> dict[str, dict]:
+        return {v: r for v, r in self.taxonomy.items() if r["level"] == level}
+
+    @property
+    def pillar(self) -> set[str]:
+        return set(self.at_level("P"))
+
+    @property
+    def p1_cluster(self) -> set[str]:
+        return set(self.at_level("P-1"))
+
+    @property
+    def p2_focus_area(self) -> set[str]:
+        return set(self.at_level("P-2"))
+
+    def parents_of(self, value: str) -> tuple[str, str]:
+        """(pillar, p1_cluster) for any taxonomy value. Blank where not applicable."""
+        row = self.taxonomy.get(value, {})
+        return row.get("pillar", ""), row.get("parent_p1", "")
 
     # -- geography ---------------------------------------------------------
 
@@ -158,15 +189,20 @@ def validate(store: Store, vocab: Vocab) -> list[Problem]:
                 )
             )
 
-        _check_values(split_multi(row.get("pillar")), vocab.pillar, where, "pillar", problems)
-        _check_values(split_multi(row.get("sub_pillar")), set(vocab.sub_pillar), where, "sub_pillar", problems)
         _check_values(split_multi(row.get("geography")), set(vocab.geography), where, "geography", problems)
         if row.get("source_type") and row["source_type"] not in vocab.source_type:
             problems.append(
                 Problem(ERROR, where, f"source_type '{row['source_type']}' is not in the controlled list")
             )
 
-        problems.extend(_hierarchy_warnings(row, vocab, where))
+        url = row.get("source_url", "")
+        if url and not url.startswith(("http://", "https://")):
+            problems.append(
+                Problem(ERROR, where, f"source_url '{url}' must start with http:// or https://")
+            )
+
+        problems.extend(_taxonomy_problems(row, vocab, where))
+        problems.extend(_geography_warnings(row, vocab, where))
 
         for numeric in ("year_published", "total_author_count"):
             value = row.get(numeric)
@@ -207,7 +243,8 @@ def validate(store: Store, vocab: Vocab) -> list[Problem]:
             problems.append(Problem(ERROR, where, f"origin '{row['origin']}' is not Manual or From LAB"))
 
         _check_values(split_multi(row.get("geography")), set(vocab.geography), where, "geography", problems)
-        problems.extend(_hierarchy_warnings(row, vocab, where, sub_pillar=False))
+        problems.extend(_taxonomy_problems(row, vocab, where, required=False))
+        problems.extend(_geography_warnings(row, vocab, where))
 
         for filename in split_multi(row.get("source_files")):
             if not store.source_by_file(filename):
@@ -247,8 +284,60 @@ def validate(store: Store, vocab: Vocab) -> list[Problem]:
     return problems
 
 
-def _hierarchy_warnings(row, vocab, where, sub_pillar=True) -> list[Problem]:
-    """Warn when a child value is tagged without its parent.
+def _taxonomy_problems(row, vocab, where, required=True) -> list[Problem]:
+    """Check the P / P-1 / P-2 chain a row writes.
+
+    Each P-2 has exactly one parent P-1 and each P-1 one pillar, so a written
+    chain is verifiable rather than merely conventional. A wrong chain is an
+    error: it asserts a relationship the taxonomy does not contain.
+    """
+    problems: list[Problem] = []
+    pillars = split_multi(row.get("pillar"))
+    clusters = split_multi(row.get("p1_cluster"))
+    focus_areas = split_multi(row.get("p2_focus_area"))
+
+    _check_values(pillars, vocab.pillar, where, "pillar", problems)
+    _check_values(clusters, vocab.p1_cluster, where, "p1_cluster", problems)
+    _check_values(focus_areas, vocab.p2_focus_area, where, "p2_focus_area", problems)
+
+    if required and not pillars:
+        problems.append(Problem(ERROR, where, "required field 'pillar' is empty"))
+
+    for focus in focus_areas:
+        pillar, cluster = vocab.parents_of(focus)
+        if not pillar:
+            continue  # unknown value, already reported above
+        if clusters and cluster not in clusters:
+            problems.append(
+                Problem(
+                    ERROR,
+                    where,
+                    f"p2_focus_area '{focus}' belongs to p1_cluster '{cluster}', "
+                    f"but the row says {clusters}",
+                )
+            )
+        if pillars and pillar not in pillars:
+            problems.append(
+                Problem(
+                    ERROR, where,
+                    f"p2_focus_area '{focus}' belongs to pillar '{pillar}', but the row says {pillars}",
+                )
+            )
+
+    for cluster in clusters:
+        pillar, _ = vocab.parents_of(cluster)
+        if pillar and pillars and pillar not in pillars:
+            problems.append(
+                Problem(
+                    ERROR, where,
+                    f"p1_cluster '{cluster}' belongs to pillar '{pillar}', but the row says {pillars}",
+                )
+            )
+    return problems
+
+
+def _geography_warnings(row, vocab, where) -> list[Problem]:
+    """Warn when a country is tagged without its region.
 
     A warning, never a rewrite: the convention is enforced but the user's data
     is not silently edited underneath them.
@@ -261,12 +350,4 @@ def _hierarchy_warnings(row, vocab, where, sub_pillar=True) -> list[Problem]:
             problems.append(
                 Problem(WARNING, where, f"geography has '{value}' without its region '{parent}'")
             )
-    if sub_pillar:
-        values = split_multi(row.get("sub_pillar"))
-        for value in values:
-            parent = vocab.sub_pillar.get(value, {}).get("parent_p1")
-            if parent and parent not in values:
-                problems.append(
-                    Problem(WARNING, where, f"sub_pillar has '{value}' without its P-1 cluster '{parent}'")
-                )
     return problems

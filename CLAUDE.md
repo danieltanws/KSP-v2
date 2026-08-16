@@ -83,7 +83,7 @@ Full text and reasoning: `.claude/skills/ksp/references/hard-rules.md`.
 ksp/lab/sources.csv       one row per document; files live in lab/documents/
 ksp/lead/actors.csv       actors, mandatory stable ID
 ksp/lead/authorship.csv   one row per person per document
-ksp/vocab/                controlled lists - no free text where a list exists
+ksp/vocab/                controlled lists - taxonomy.csv holds the whole 4P tree
 ksp/registry/skills.csv   the 16 declarations
 .claude/skills/ksp/analyses/  POC skill prompts - one file per POC skill
 tools/ksp.py              CLI - check, validate, registry, refuse, triage,
@@ -118,16 +118,22 @@ deliberately excludes — see the accepted costs below.
 
 - **Python: standard library only.** The stores are CSV so they open in a
   spreadsheet; the tooling should run anywhere with no install step.
-- **Tests:** `pytest -q` from the repo root. 164 tests, all fast.
+- **Tests:** `pytest -q` from the repo root. 203 tests, all fast.
 - **After editing `ksp/registry/skills.csv`,** run
   `python3 tools/render_registry_doc.py` — a test fails otherwise.
 - **After editing anything in `ksp/vocab/`,** run
   `python3 tools/render_vocab_doc.py` — a test fails otherwise. The generated
   `outputs/CONTROLLED_VALUES.md` is handed to external ingest agents, so it
   must never disagree with the validator.
-- **The real store ships empty.** Test data lives in `tests/fixtures/`, never
-  in `ksp/`. Fabricated rows in the real store would destroy the one thing this
-  system is for.
+- **The real store ships empty, and stays that way.** Test stores are built in
+  `tests/conftest.py` into a temp directory — there is no checked-in store of
+  fabricated documents, because one existed and was twice mistaken for real
+  data. Never put sample rows in `ksp/`, and never recreate a sample store on
+  disk. Plausible fake evidence is a liability in a system built on claims
+  tracing to sources someone can open.
+- **`tests/test_empty_store.py` covers the shipped state.** Every command
+  against an empty store must return `NO DATA` with an explanation — never
+  silence, never a fabricated finding.
 
 ### Accepted costs — do not "fix" these
 
@@ -146,6 +152,7 @@ Decided deliberately. Adding features to solve them makes the system worse.
 | A POC answer looks like a computed one | Owner decision. The evidence base carries the distinction. |
 | The one implemented gap analysis is the weakest of the 16 | It is the only one the current fields support. Section 1 disclosure is the mitigation. |
 | Triage ranks on keyword cues, not meaning | It is a shortlist, not a decision. The agent routes; cues only surface candidates. |
+| A tagged actor is weaker evidence than a document-backed one | True, and why the buckets stay separate. Merging them would overstate the response side. |
 
 ### Out of scope — do not build
 

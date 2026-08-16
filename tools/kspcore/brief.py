@@ -62,8 +62,10 @@ def run(
     ]
     if actors.via_global_only:
         lines.append(f"  LEAD actors           +{len(actors.via_global_only)} via a Global document only")
+    if actors.by_tag:
+        lines.append(f"  LEAD actors           +{len(actors.by_tag)} tagged with this focus area, no document")
     if actors.geography_only:
-        lines.append(f"  LEAD actors           +{len(actors.geography_only)} geography-only, no document tie")
+        lines.append(f"  LEAD actors           +{len(actors.geography_only)} geography-only, no document or tag")
     if sources.global_documents:
         lines.append(f"  Global documents      +{len(sources.global_documents)} tagged Global, counted separately")
     if earliest is None:
@@ -90,6 +92,11 @@ def run(
         lines.append("  (none linked by a matching document)")
     for actor, via in actors.via_global_only:
         lines.append(f"  • {actor.get('name')} — via a Global document only: {', '.join(via)}")
+    for actor in actors.by_tag:
+        actor_type = actor.get("actor_type") or "type not recorded"
+        lines.append(f"  • {actor.get('name')} — {actor.get('form')}, {actor_type}")
+        lines.append(f"      tagged {actor.get('p2_focus_area')}; no document. "
+                     f"Cite: {actor.get('basis') or 'no basis recorded'}")
     for actor in actors.geography_only:
         lines.append(f"  • {actor.get('name')} — geography match only, {actor.get('basis') or 'no basis recorded'}")
 
@@ -133,8 +140,11 @@ def _document_block(row: dict, tag: str = "") -> list[str]:
         f"      file: {row.get('file')}  ·  {row.get('source_type')}  ·  "
         f"{row.get('publisher')}  ·  {year}",
         f"      geography: {row.get('geography')}",
-        f"      sub-pillar: {row.get('sub_pillar') or '(none)'}",
+        f"      focus area: {row.get('p2_focus_area') or '(none)'}"
+        f"  ({row.get('p1_cluster') or 'no cluster'})",
     ]
+    if row.get("source_url"):
+        block.append(f"      source: {row['source_url']}")
     if row.get("description"):
         block.append(f"      description: {row['description']}")
     if row.get("quick_insights"):
