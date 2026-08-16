@@ -83,6 +83,7 @@ Full text and reasoning: `.claude/skills/ksp/references/hard-rules.md`.
 ksp/lab/sources.csv       one row per document; files live in lab/documents/
 ksp/lead/actors.csv       actors, mandatory stable ID
 ksp/lead/authorship.csv   one row per person per document
+ksp/lion/                 retained gaps - unapproved/ and approved/
 ksp/vocab/                controlled lists - taxonomy.csv holds the whole 4P tree
 ksp/registry/skills.csv   the 16 declarations
 .claude/skills/ksp/analyses/  POC skill prompts - one file per POC skill
@@ -106,12 +107,17 @@ Every file this agent creates has one of three homes. Route by what the file
 | Folder | Holds |
 |---|---|
 | `docs/` | Documentation about this system, for whoever maintains it |
-| `ksp/` | The stores — LAB, LEAD, and LION if it is ever built |
+| `ksp/` | The stores — LAB, LEAD, LION |
 | **`outputs/`** | Everything else |
 
 **Write a file only when asked.** Answering a question does not produce one.
-Auto-saving every skill run would retain gaps between runs, which the POC
-deliberately excludes — see the accepted costs below.
+This still holds now that `ksp/lion/` exists: a gap is kept because someone
+asked to keep it, never as a side effect of asking a question. Auto-saving
+every run would turn the folder into a log of everything anyone tried.
+
+A kept gap goes to `ksp/lion/unapproved/`. It moves to `approved/` when a
+person signs it off — the folder is the state, so there is no status column to
+keep in step.
 
 ---
 
@@ -145,7 +151,7 @@ Decided deliberately. Adding features to solve them makes the system worse.
 | Problem/response classification varies between runs | No stored field. Disclosure is the mitigation. |
 | Renaming a LAB file breaks references | No stable IDs in LAB. The integrity check and user habit are the mitigations. |
 | Weak gaps are produced, not suppressed | Disclosure over threshold. |
-| Nothing persists between runs | No LION store in the POC. |
+| A gap only persists if someone asks | `ksp/lion/` retains reviewed gaps, not every run. Auto-saving would make the folder meaningless. |
 | LEAD skews to researchers | Authors are researchers. Manual entry covers the rest. |
 | Duplicate actors possible | Store is too small to justify matching logic. |
 | 12 skills always refuse | Each refusal names the field that would unlock it, which turns user demand into a build roadmap. |
@@ -158,6 +164,6 @@ Decided deliberately. Adding features to solve them makes the system worse.
 ### Out of scope — do not build
 
 Scanners, sync, watchers, scheduled jobs. An agent that populates LEAD from
-LAB. The LION store. Network analysis, centrality, clustering. Transaction
+LAB. Network analysis, centrality, clustering. Transaction
 records, fund flows, additionality. Deduplication, fuzzy name matching,
 confidence scoring. Multi-user features. A web front end.
