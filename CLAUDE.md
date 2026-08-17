@@ -13,8 +13,8 @@ of sixteen declared analyses and either runs it or refuses by name.
 
 ## The rule that governs everything
 
-**Sixteen analyses are declared today. Two are implemented, two are POC, twelve
-must fail loudly.**
+**Sixteen analyses are declared today. Three are implemented, two are POC,
+eleven must fail loudly.**
 
 Sixteen is the current list, not a limit — the registry grows as new questions
 arrive. What never changes is that the agent runs **only what is declared** in
@@ -26,7 +26,7 @@ Do not substitute a different analysis. Do not attempt it anyway.
 An unavailable skill that quietly answers with the wrong analysis is the
 failure mode this whole system is designed against.
 
-**Do not implement the twelve on your own initiative.** Each depends on a field
+**Do not implement the eleven on your own initiative.** Each depends on a field
 that does not exist yet, and inventing one to unblock a question is the failure
 this rule exists to stop.
 
@@ -150,7 +150,7 @@ ksp/registry/skills.csv   the 16 declarations
 .claude/skills/ksp/analyses/  POC skill prompts - one file per POC skill
 .claude/skills/ksp-file/  filing skill - work out a document's LAB metadata
 tools/ksp.py              CLI - check, validate, registry, refuse, triage,
-                          coverage, evidence, brief
+                          coverage, network, evidence, brief
 docs/                     the specifications; two are normative
 tests/                    pytest, plus fixture stores
 ```
@@ -208,7 +208,7 @@ same treatment: show the filename and the six sections first.
 
 - **Python: standard library only.** The stores are CSV so they open in a
   spreadsheet; the tooling should run anywhere with no install step.
-- **Tests:** `pytest -q` from the repo root. 179 tests, all fast.
+- **Tests:** `pytest -q` from the repo root. 189 tests, all fast.
 - **After editing `ksp/registry/skills.csv`,** run
   `python3 tools/render_registry_doc.py` — a test fails otherwise.
 - **`ksp/vocab/` is the only list of permitted values.** The validator reads it
@@ -236,10 +236,12 @@ Decided deliberately. Adding features to solve them makes the system worse.
 | A gap only persists if someone asks | `ksp/lion/` retains reviewed gaps, not every run. Auto-saving would make the folder meaningless. |
 | LEAD skews to researchers | Authors are researchers. Manual entry covers the rest. |
 | Duplicate actors possible | Store is too small to justify matching logic. |
-| 12 skills always refuse | Each refusal names the field that would unlock it, which turns user demand into a build roadmap. |
+| 11 skills always refuse | Each refusal names the field that would unlock it, which turns user demand into a build roadmap. |
 | A POC skill's method varies run to run | It has no stored field to compute from. That is what POC means here. |
 | A POC answer looks like a computed one | Owner decision. The evidence base carries the distinction. |
-| The one implemented gap analysis is the weakest of the 16 | It is the only one the current fields support. Section 1 disclosure is the mitigation. |
+| Gap analysis is the weakest of the 16 | Implemented early because the current fields support it. Section 1 disclosure is the mitigation. |
+| The network graph maps the reading list, not the field | Unavoidable — it is built from filed documents. Every output says so, and no unweighted count is ever reported. |
+| Network position skews to researchers, like LEAD | Same cause: authors are researchers. A graph of implementers and funders would look different and this one cannot show it. |
 | Triage ranks on keyword cues, not meaning | It is a shortlist, not a decision. The agent routes; cues only surface candidates. |
 | A tagged actor is weaker evidence than a document-backed one | True, and why the buckets stay separate. Merging them would overstate the response side. |
 | The same question gets a differently-worded answer for different people | Register adapts to the reader by design. What it must say does not. |
@@ -248,6 +250,5 @@ Decided deliberately. Adding features to solve them makes the system worse.
 ### Out of scope — do not build
 
 Scanners, sync, watchers, scheduled jobs. An agent that populates LEAD from
-LAB. Network analysis, centrality, clustering. Transaction
-records, fund flows, additionality. Deduplication, fuzzy name matching,
+LAB. Transaction records, fund flows, additionality. Deduplication, fuzzy name matching,
 confidence scoring. Multi-user features. A web front end.

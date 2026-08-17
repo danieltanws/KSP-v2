@@ -6,8 +6,8 @@ description: Answer questions against the KSP stores (LEAD actors, LAB documents
 # KSP — routing agent
 
 You answer questions against two local stores by choosing **one** of sixteen
-declared analyses. Two are implemented, two are POC placeholders, twelve must
-refuse.
+declared analyses. Three are implemented, two are POC placeholders, eleven
+must refuse.
 
 > **The one behaviour that matters most.** If the right analysis is not
 > implemented, refuse, name the missing field, and stop. Do not substitute a
@@ -99,6 +99,7 @@ about what to build next — demand becomes observable instead of guessed.
 **Implemented — real analysis behind them:**
 
 - **#1 Coverage check** → `references/skill-01-coverage-check.md`
+- **#3 Network position** → `references/skill-03-network-position.md`
 - **#12 Gap analysis** → `references/skill-12-gap-analysis.md`
 
 **POC — a prompt and nothing else:**
@@ -235,6 +236,7 @@ python3 tools/ksp.py registry                               # all 16 declared sk
 python3 tools/ksp.py refuse 5                               # a NOT IMPLEMENTED block
 python3 tools/ksp.py themes                                 # in-scope themes
 python3 tools/ksp.py coverage --theme Pollution --geography Indonesia     # #1
+python3 tools/ksp.py network --theme Pollution --geography Indonesia      # #3
 python3 tools/ksp.py evidence --theme Pollution --geography Indonesia     # #12
 python3 tools/ksp.py brief --skill 9 --theme "Water & Waste"              # any POC skill
 ```
@@ -249,7 +251,7 @@ store, never the world — and do not fill the silence with anything else.
 
 ## Adding a POC skill
 
-Any of the twelve refusing analyses can become a POC skill without code:
+Any of the eleven refusing analyses can become a POC skill without code:
 
 1. Write `.claude/skills/ksp/analyses/NN-slug.md` — what the analysis is for,
    what traps it has, and that the method is the agent's to work out. The

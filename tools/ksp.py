@@ -6,6 +6,7 @@
     ksp.py registry                    the 16 declared skills
     ksp.py refuse N                    the NOT IMPLEMENTED block for skill N
     ksp.py coverage --theme T          skill #1
+    ksp.py network  --theme T          skill #3
     ksp.py evidence  --theme T         skill #12 inputs
     ksp.py themes                      the in-scope themes
 
@@ -21,7 +22,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from kspcore import brief, coverage, evidence, integrity, triage
+from kspcore import brief, coverage, evidence, integrity, network, triage
 from kspcore.registry import Registry, render_out_of_scope
 from kspcore.store import Store, repo_root
 from kspcore.vocab import ERROR, Vocab, validate
@@ -107,6 +108,16 @@ def cmd_evidence(args) -> int:
     return 0
 
 
+def cmd_network(args) -> int:
+    store, vocab = _load(args)
+    theme, refusal = _resolve_theme(vocab, args.theme)
+    if refusal:
+        print(refusal)
+        return 1
+    print(network.run(store, vocab, theme, args.geography))
+    return 0
+
+
 def cmd_triage(args) -> int:
     print(triage.run(Registry.load(), args.question))
     return 0
@@ -124,6 +135,14 @@ def cmd_brief(args) -> int:
         # Never let brief become a back door around a refusal.
         print(registry.render_refusal(skill.number))
         return 1
+    if skill.implemented:
+        # brief is the generic POC gatherer. Running it for a skill that has a
+        # real analysis would produce the wrong output under the right name.
+        print(
+            f"error: {skill.name} is implemented - run its own command, not brief",
+            file=sys.stderr,
+        )
+        return 2
     theme, refusal = _resolve_theme(vocab, args.theme)
     if refusal:
         print(refusal)
@@ -171,6 +190,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     for name, func, helptext in (
         ("coverage", cmd_coverage, "skill #1 - what the store holds"),
+        ("network", cmd_network, "skill #3 - who connects otherwise separate clusters"),
         ("evidence", cmd_evidence, "skill #12 - gap analysis inputs"),
     ):
         p = sub.add_parser(name, help=helptext)
