@@ -29,7 +29,7 @@ POC_SKILLS = [6, 9]
 @pytest.mark.parametrize("number", POC_SKILLS)
 def test_brief_leads_with_the_result_label_and_the_skill(demo, vocab, registry, water, number):
     text = brief.run(demo, vocab, registry, number, water)
-    assert text.startswith(f"{RESULT} — {registry.get(number).name} (#{number})")
+    assert text.startswith(f"{RESULT} — {registry.get(number).name}")
 
 
 @pytest.mark.parametrize("number", POC_SKILLS)

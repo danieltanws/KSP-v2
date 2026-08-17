@@ -81,7 +81,7 @@ def render(registry: Registry, question: str, candidates: list[Candidate]) -> st
         if skill.deferred:
             detail = "   buildable, not yet built"
         lines.append(
-            f"  {marker} #{skill.number:<3} {skill.name.ljust(width)}  {state:<12}{detail}".rstrip()
+            f"  {marker} {skill.name.ljust(width)}  {state:<12}{detail}".rstrip()
         )
         lines.append(f"        matched: {', '.join(candidate.hits)}")
 
@@ -91,19 +91,19 @@ def render(registry: Registry, question: str, candidates: list[Candidate]) -> st
     lines.append("")
 
     if top.skill.available:
-        lines.append(f"Closest match is #{top.skill.number} {top.skill.name}. To run it:")
+        lines.append(f"Closest match is {top.skill.name}. To run it:")
         lines.append(f"    {_command(top.skill)}")
         if top.skill.is_poc:
             lines += [
                 "",
-                f"#{top.skill.number} is a POC skill: no stored field backs it, so the method is",
-                "improvised from reading the documents. The proper version would need: "
+                f"{top.skill.name} is a POC skill: no stored field backs it, so the method",
+                "is improvised from reading the documents. The proper version would need: "
                 f"{top.skill.missing_field}.",
             ]
     else:
         # The dangerous branch. Never offer a substitute here.
         lines += [
-            f"Closest match is #{top.skill.number} {top.skill.name}, and it is blocked.",
+            f"Closest match is {top.skill.name}, and it is blocked.",
             f"It needs: {top.skill.missing_field}."
             if not top.skill.deferred
             else "It needs no new field — buildable, not yet built.",
@@ -111,7 +111,7 @@ def render(registry: Registry, question: str, candidates: list[Candidate]) -> st
         ]
         others = [c for c in candidates[1:] if c.skill.available]
         if others:
-            named = ", ".join(f"#{c.skill.number}" for c in others)
+            named = ", ".join(c.skill.name for c in others)
             lines += [
                 f"{named} answer different questions. Running one instead would be a",
                 "substitution, not an answer, so no command is offered for them.",

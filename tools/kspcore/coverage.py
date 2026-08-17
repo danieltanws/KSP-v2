@@ -28,7 +28,7 @@ def run(store: Store, vocab: Vocab, theme: dict | None, geography: str | None = 
     if not docs and not sources.global_documents:
         return "\n".join(
             [
-                f"{NO_DATA} — Coverage check (#1)",
+                f"{NO_DATA} — Coverage check",
                 "",
                 f"Scope: {scope}",
                 "",
@@ -42,7 +42,7 @@ def run(store: Store, vocab: Vocab, theme: dict | None, geography: str | None = 
 
     earliest, latest, undated = year_range(docs)
     lines = [
-        f"{RESULT} — Coverage check (#1)",
+        f"{RESULT} — Coverage check",
         "",
         f"Scope: {scope}",
         "",

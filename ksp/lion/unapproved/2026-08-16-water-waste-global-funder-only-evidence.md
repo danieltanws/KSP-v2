@@ -1,6 +1,6 @@
 # Water & Waste, global — the store holds only the response side
 
-Skill #12 Gap analysis · run 16 Aug 2026 · **unapproved**
+Gap analysis · run 16 Aug 2026 · **unapproved**
 
 ---
 
@@ -16,9 +16,9 @@ linked by a matching document.
 - **Publishers:** World Bank Group (2), Asian Development Bank (1), World
   Resources Institute (1)
 
-Whole store: 4 documents, 12 actors. **This is a very thin base**, and #12 is
-the lowest-trust analysis of the sixteen — the one most likely to reflect what
-has been read rather than what is true.
+Whole store: 4 documents, 12 actors. **This is a very thin base**, and gap
+analysis is the lowest-trust of the sixteen — the one most likely to reflect
+what has been read rather than what is true.
 
 ## 2. Problem side
 
@@ -71,9 +71,9 @@ intentions or its own instrument, so the store can say in detail what three
 multilateral institutions plan to do about water and cannot say, from any
 independent source, what problem that plan is meeting.**
 
-This is the inverse of the asymmetry #12 exists to find. The response side is
-unusually well evidenced; the problem side exists only as premises quoted
-inside those same responses.
+This is the inverse of the asymmetry gap analysis exists to find. The response
+side is unusually well evidenced; the problem side exists only as premises
+quoted inside those same responses.
 
 **No candidate follows from this.** Producing one would mean treating three
 institutional strategies as evidence of a hole they do not fill.

@@ -30,7 +30,7 @@ def run(store: Store, vocab: Vocab, theme: dict, geography: str | None = None) -
     if not docs and not sources.global_documents:
         return "\n".join(
             [
-                f"{NO_DATA} — Gap analysis (#12)",
+                f"{NO_DATA} — Gap analysis",
                 "",
                 f"Scope: theme {theme['theme']}"
                 + (f", geography {geography}" if geography else ", all geographies"),
@@ -48,7 +48,7 @@ def run(store: Store, vocab: Vocab, theme: dict, geography: str | None = None) -
     by_type = tally(docs, "source_type")
 
     lines = [
-        "EVIDENCE BRIEF — inputs for Gap analysis (#12)",
+        "EVIDENCE BRIEF — inputs for Gap analysis",
         "",
         "This is raw material, not an answer. Classify each document below as problem side,",
         "response side, or both, then write the six sections. Do not paste this brief.",
@@ -129,9 +129,9 @@ def run(store: Store, vocab: Vocab, theme: dict, geography: str | None = None) -
             "── MANDATORY DISCLOSURES for the output ──",
             "  · Problem/response classification is inferred now, not stored. It may differ",
             "    on another run. Name which documents you placed on each side.",
-            "  · #12 is the lowest-trust candidate type in the catalogue: the one most likely",
-            "    to reflect thin reading rather than real absence, and the one readers find",
-            "    most convincing. Section 1 is not optional.",
+            "  · Gap analysis is the lowest-trust candidate type in the catalogue: the one",
+            "    most likely to reflect thin reading rather than real absence, and the one",
+            "    readers find most convincing. Section 1 is not optional.",
             "  · Default Section 5 to 'Coverage gap'. 'Confirmed absent' is a strong claim and",
             "    must be justified in the text.",
         ]

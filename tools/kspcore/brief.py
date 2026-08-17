@@ -38,7 +38,7 @@ def run(
     if not docs and not sources.global_documents:
         return "\n".join(
             [
-                f"{NO_DATA} — {skill.name} (#{skill.number})",
+                f"{NO_DATA} — {skill.name}",
                 "",
                 f"Scope: {scope}",
                 "",
@@ -52,7 +52,7 @@ def run(
 
     earliest, latest, undated = year_range(docs)
     lines = [
-        f"{RESULT} — {skill.name} (#{skill.number})",
+        f"{RESULT} — {skill.name}",
         "",
         f"Scope: {scope}",
         "",

@@ -40,7 +40,7 @@ a build roadmap: what people keep asking for is what to build next.
 ```
 $ python3 tools/ksp.py refuse 5
 
-NOT IMPLEMENTED — Scale mismatch (#5)
+NOT IMPLEMENTED — Scale mismatch
 
 A documented need and a documented response that differ by orders of magnitude.
 
@@ -50,8 +50,13 @@ The only candidate type that does not depend on absence.
 Caveat if it is built: The two numbers usually come from different sources with
 different scopes. Report the mismatch, never the multiple.
 
-Implemented skills that may be relevant: Coverage check (#1), Gap analysis (#12).
+Implemented skills that may be relevant: Coverage check, Gap analysis.
 ```
+
+Skills are named, never numbered, in anything a reader sees. The registry
+number is an index into a catalogue they do not have, so it reads as a rank.
+It survives only where it is genuinely an index: `ksp.py registry`, `refuse 5`,
+`--skill 9`.
 
 ---
 
@@ -64,10 +69,13 @@ $ python3 tools/ksp.py triage "could the Vietnam kiosk model work in Indonesia?"
 
 ROUTING — "could the Vietnam kiosk model work in Indonesia?"
 
-  ← #9   Transferability  READY (POC)
+  ← Transferability  READY (POC)
         matched: work in
 
 Nothing has been run.
+
+Closest match is Transferability. To run it:
+    ksp.py brief --skill 9 --theme "<theme>" --geography "<geography>"
 ```
 
 If the closest match is **blocked**, that is the answer — the analyses below it
@@ -246,13 +254,14 @@ Read these before quoting any output.
 - **LEAD skews to researchers.** Authors are researchers. Implementers and
   funders rarely publish, so every field looks research-heavy whether or not it
   is.
-- **A POC skill's answer is improvised.** #6 and #9 have no stored field behind
-  them; the agent invents the method by reading. Check the `Not stored` line in
-  the evidence base before quoting either.
-- **The implemented gap analysis (#12) is the weakest of the sixteen** — the
-  one most likely to reflect thin reading, and the one readers find most
-  convincing. It is implemented first only because it is the only one the
-  current fields support.
+- **A POC skill's answer is improvised.** Proven but unscaled and
+  Transferability have no stored field behind them; the agent invents the
+  method by reading. Check the `Not stored` line in the evidence base before
+  quoting either.
+- **The implemented gap analysis is the weakest of the sixteen** — the one most
+  likely to reflect thin reading, and the one readers find most convincing. It
+  is implemented first only because it is the only one the current fields
+  support.
 - **Classification is not stable between runs.** There is no stored
   problem/response field, so the same question may sort documents differently
   on different days. Disclosure is the mitigation, by design.
@@ -266,7 +275,7 @@ is the system working correctly.
 ## Development
 
 ```bash
-pytest -q                              # 164 tests
+pytest -q                              # 205 tests
 python3 tools/render_registry_doc.py   # after editing ksp/registry/skills.csv
 python3 tools/render_vocab_doc.py      # after editing anything in ksp/vocab/
 ```

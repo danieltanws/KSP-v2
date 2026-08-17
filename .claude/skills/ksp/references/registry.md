@@ -60,7 +60,7 @@ they are not built now.
 - **#9 Transferability** — Most transfer failures happen because a condition nobody wrote down was doing the work. The only analysis here where being wrong costs money directly rather than costing attention.
 - **#10 Sub-pillar co-occurrence** — Most non-co-occurrences are simply unrelated things. Any two topics can be made to sound like a promising intersection after the fact.
 - **#11 Problem rising, response static** — The corpus was assembled, not accumulated. An apparent rise may simply be recent reading. Treat any trend line as a description of collection activity.
-- **#12 Gap analysis** — The output most likely to be a coverage artefact and the one people find most convincing. Never present it without the coverage figure from #1 alongside it.
+- **#12 Gap analysis** — The output most likely to be a coverage artefact and the one people find most convincing. Never present it without the coverage figure from Coverage check alongside it.
 - **#13 Well resourced, not working** — Reporting is systematically positive. A field can look like it is working while producing nothing, and the stores will never show the difference.
 - **#14 Fund flows** — Rate-of-change analysis on incomplete data mostly measures changes in disclosure practice. The failure mode that looks most like a finding.
 - **#15 Failure mapping** — What gets recorded as failure is a fraction of what failed. Absence of a recorded failure is not evidence that nothing was tried.

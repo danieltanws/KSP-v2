@@ -89,8 +89,7 @@ def test_every_other_skill_is_declared_not_implemented(registry):
 @pytest.mark.parametrize("number", sorted(MISSING_FIELDS))
 def test_blocked_skills_refuse_and_name_their_field(registry, number):
     text = registry.render_refusal(number)
-    assert text.startswith(f"{NOT_IMPLEMENTED} — ")
-    assert f"(#{number})" in text
+    assert text.startswith(f"{NOT_IMPLEMENTED} — {registry.get(number).name}")
     assert MISSING_FIELDS[number] in text, f"#{number} must name its blocker"
 
 

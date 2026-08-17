@@ -101,3 +101,16 @@ def test_thin_evidence_is_disclosed_rather_than_withheld(demo, vocab):
     text = coverage.run(demo, vocab, theme, "Vietnam")
     assert "NO DATA" not in text, "a handful of documents is thin, but it is not no data"
     assert f"LAB documents          {held}" in text
+
+
+def test_no_skill_numbers_reach_a_reader(rendered):
+    """`#12` reads as a rank or a priority to someone who does not have the
+    catalogue in front of them. Registry indices stay internal; the registry
+    listing itself is exempt, because there the number IS the index."""
+    import re
+
+    for where, text in rendered:
+        if where in ("registry",):
+            continue
+        hits = re.findall(r"#\d+", text)
+        assert hits == [], f"{where} exposed a skill number: {hits}"

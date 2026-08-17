@@ -125,7 +125,7 @@ keep in step.
 
 - **Python: standard library only.** The stores are CSV so they open in a
   spreadsheet; the tooling should run anywhere with no install step.
-- **Tests:** `pytest -q` from the repo root. 204 tests, all fast.
+- **Tests:** `pytest -q` from the repo root. 205 tests, all fast.
 - **After editing `ksp/registry/skills.csv`,** run
   `python3 tools/render_registry_doc.py` — a test fails otherwise.
 - **After editing anything in `ksp/vocab/`,** run
