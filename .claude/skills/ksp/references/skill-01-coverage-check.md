@@ -32,8 +32,9 @@ Everything else in the registry is uninterpretable without this.
 
 ## Reading it out
 
-Print the tool's output. It already carries the counts, the breakdowns and the
-caveat.
+Give the counts, the breakdowns that matter, and the caveat. The tool's block
+carries all three already — read it and say what it holds rather than pasting
+the table, unless the reader wants the table.
 
 Two things to add in your own words when they apply:
 
@@ -50,4 +51,5 @@ Never let this be read as a statement about the world.
 > A well-covered cell means we have read a lot, not that a field is crowded.
 > A thin cell means we have read little, not that the subject is neglected.
 
-The tool prints that line. Do not delete it when summarising.
+The tool prints that line. Say it in your own words if you like, but it does
+not get dropped — it is the whole reason a count is safe to give out.

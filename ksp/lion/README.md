@@ -26,6 +26,11 @@ A skill run does not write a file. Gaps arrive here because someone asked for
 one to be kept — which is what makes the contents a deliberate record rather
 than a log of every question anyone tried.
 
+**And asking is not the last step.** Show the filename and the six sections,
+and wait for a yes before writing. A gap is an argument assembled from inferred
+classifications; what gets kept should be the version the person actually read,
+not the one produced a moment earlier.
+
 ## Two things to hold on to
 
 **`unapproved/` is the normal state.** Most gaps are coverage artefacts — they

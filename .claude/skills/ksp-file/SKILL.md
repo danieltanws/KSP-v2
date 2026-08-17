@@ -5,10 +5,15 @@ description: Work out a document's LAB metadata and file it. Use when adding a P
 
 # Filing a document into LAB
 
-Read the document, work out its metadata, write the rows, validate.
+Read the document, work out its metadata, **show it and wait**, then write and
+validate.
 
 This is a **filing** job, not an analysis. It adds to the store; it answers no
 question. For questions, use the `ksp` skill.
+
+> **Nothing is written until the user has seen it.** Steps 1–4 work the filing
+> out. Step 5 puts it in front of them. Nothing touches `ksp/` until they say
+> yes — not the rows, and not the file itself.
 
 > **The one rule.** Record what the document says about itself. Where it says
 > nothing, leave the field blank — never fill a gap with a reasonable guess.
@@ -27,7 +32,7 @@ metadata is often wrong — a real example from this store carried
 `/Title: Title Lorem Ipsum` and an `/Author` who was the layout designer, not a
 byline.
 
-## 2. Fill the row
+## 2. Work out the row
 
 Header, and the required fields:
 
@@ -40,7 +45,7 @@ total_author_count,date_added
 Required: `name`, `file`, `record_type`, `description`, `pillar`, `geography`,
 `source_type`, `publisher`.
 
-Permitted values for every controlled field: **`outputs/CONTROLLED_VALUES.md`**.
+Permitted values for every controlled field: the lists in **`ksp/vocab/`**.
 
 | Field | How to decide it |
 |---|---|
@@ -75,10 +80,10 @@ implication, no "this suggests". A flattened fact can be recovered by reopening
 the document; a flattened judgment cannot, because nobody can tell whose it
 was.
 
-## 3. Put the file in place first
+## 3. Choose the filename — do not copy yet
 
-Copy the document into `ksp/lab/documents/` **before** writing the row, and
-give it its final name.
+Decide the name the document will carry. It gets copied in at step 6, once the
+filing is approved.
 
 - **Filenames must be unique across the whole store.** They are the only key —
   there are no IDs in LAB.
@@ -87,7 +92,11 @@ give it its final name.
 - A useful convention: publisher, subject, year —
   `WBG_Water_Strategy_Implementation_Plan.pdf`.
 
-## 4. Add the LEAD rows
+Because it can never be changed, the filename is one of the things the user
+approves at step 5. Do not pick a permanent key on their behalf and copy it in
+before they have seen it.
+
+## 4. Work out the LEAD rows
 
 **Authors only.** Author names, their organisations, and the geography the
 document concerns. Do not harvest every named entity — every body mentioned in
@@ -108,7 +117,40 @@ An actor row needs `name`, `form`, and **either** a source link **or** a
 Authorship rows store `actor_id`, `source_file`, `position` — position as
 printed. Role is derived, never stored.
 
-## 5. Validate, always
+## 5. Show it and wait
+
+Put the whole filing in front of the user before any of it exists on disk.
+
+Show:
+
+- **The document row** — every field you filled, in plain language rather than
+  raw CSV unless they want the CSV.
+- **The filename** you propose, flagged as permanent.
+- **The LEAD rows** — each actor, and the authorship positions.
+- **Every blank field, and why it is blank.** "No byline, so no author count"
+  is a fact about the document. Present it as one.
+- **Anything the vocabulary could not express**, per *When the vocabulary does
+  not fit* below.
+
+Then stop and wait for an explicit yes.
+
+**Why this step exists.** Everything above is inference. You read a document
+and decided what it is about, who wrote it, and which focus area it belongs
+under. Once written, none of that reads as inference — it reads as evidence,
+and every later analysis treats it that way. The user is not approving that you
+may file; they are approving what you concluded.
+
+Being asked to file a document is not this yes. Neither is silence.
+
+If they correct something, change it and show the corrected version. Do not
+carry a correction straight into a write.
+
+## 6. Write it
+
+Only now: copy the file into `ksp/lab/documents/` under the approved name, then
+write the LAB row and the LEAD rows.
+
+## 7. Validate, always
 
 ```bash
 python3 tools/ksp.py check      # every row opens its file
@@ -135,6 +177,8 @@ than papered over.
 
 ## What this skill must never do
 
+- **Write anything into `ksp/` before the user has seen it** — the row, the
+  LEAD rows, or the file copy
 - Fill a required field with a plausible guess
 - Reconstruct a URL that is not printed in the document
 - Write interpretation into `description` or `quick_insights`
