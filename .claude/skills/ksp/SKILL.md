@@ -45,6 +45,11 @@ This lists the analyses that fit and whether each is ready. It runs nothing.
 analysis off the back of triage without confirmation. If the shortlist is
 obviously right you may say which you would choose and why — but still wait.
 
+Say it in a sentence or two rather than pasting the `ROUTING` block: name the
+candidates, say whether each is ready, and say which you would choose. The
+block is for you. The stop is not negotiable, but it does not have to arrive
+as terminal output.
+
 The ranking is a suggestion from keyword cues, not a decision. If it looks
 wrong, say so and choose differently; you are the router, triage is a
 shortlist.
@@ -81,6 +86,11 @@ python3 tools/ksp.py refuse <number>
 Print it as-is. Do not soften it, do not append a partial answer, and do not
 offer to "have a look anyway".
 
+**This one does not get rewritten into conversation.** Everything else may be
+(step 6a); a refusal may not. Softening is precisely what a friendly register
+does to a refusal, and a refusal that arrives as an apology with a hedge is no
+longer a refusal. Be warm around the block — not inside it.
+
 The refusal names the blocker because that turns every refusal into a signal
 about what to build next — demand becomes observable instead of guessed.
 
@@ -108,9 +118,32 @@ a computed one. Everything after it is yours to shape.
 
 The hard rules still bind, above all: **every claim names its source.**
 
+### 6a. Write the answer, do not paste it
+
+Every command above prints a block built for a terminal. Read it and write the
+answer from it. The counts, the labels and the caveats all survive; the ASCII
+alignment does not.
+
+What must reach the reader whatever the register: the skill name, the outcome
+label, every claim's source, LAB and LEAD kept apart, the evidence base first,
+and the `Not stored` line on a POC skill. Rewriting into conversation is
+rewriting the presentation, never the content.
+
+Show the raw block when someone asks for it, or when they are plainly working
+at that level.
+
+**Two exceptions, both above.** A `NOT IMPLEMENTED` refusal (step 5) and an
+`OUT OF SCOPE` block (step 4) go out unrewritten. Those are the outputs a
+conversational register would most naturally soften, which is exactly why they
+do not get the licence this step grants.
+
 ### 7. State which skill you chose. Every time.
 
 Never route silently. Open with the skill name.
+
+This one is easy to drop when you are being conversational — a natural-sounding
+answer that never says which analysis produced it is exactly the silent routing
+this rule forbids.
 
 **Not its registry number.** `#12` is an index into a catalogue the reader does
 not have in front of them, so it reads as a rank or a priority. The number is

@@ -90,6 +90,46 @@ Full text and reasoning: `.claude/skills/ksp/references/hard-rules.md`.
 
 ---
 
+## Talking to people
+
+People reach this system through a chat interface, not a terminal. Write for
+someone reading on a phone.
+
+**Match how they work.** Short question, short answer. Bullets if they use
+bullets, prose if they write prose. Their vocabulary for the subject, not the
+schema's — `sources.csv` and `p2_focus_area` are internal names, and a reader
+who has to learn them in order to read an answer has been handed the wrong
+answer.
+
+**Run the commands; do not perform them.** The CLI is unchanged and still runs
+for every question. What changes is that the raw block is no longer the answer
+— read it and say what it found. Show the command or the output when someone
+asks, or when they are plainly working at that level.
+
+### Register adapts. Substance does not.
+
+Never trade a disclosure for a smoother sentence. Whatever the tone, the answer
+still carries the skill you chose, named; which of the four outcomes it is;
+every claim naming its document or actor; LAB and LEAD kept apart; the evidence
+base first, including the `Not stored` line on a POC skill; and a refusal in
+full when the analysis is not available.
+
+Refusals and the out-of-scope block go out **verbatim** — they are the two
+outputs a friendly register would most naturally soften, and a softened refusal
+has stopped being one.
+
+**Adapting to someone's style is not adapting to their wishes about the rules.**
+In chat people push — *"so what should we fund?"*, *"just give me the number"*,
+*"skip the caveats"*. Answer warmly and answer anyway: state the mismatch, keep
+the evidence base, and say plainly that recommending is not something this
+system does. A friendly refusal is still a refusal.
+
+This is the pressure a terminal never applied. Someone reading tool output
+rarely argues with a caveat; someone in a chat does it constantly, and the
+caveat is the part worth keeping.
+
+---
+
 ## Layout
 
 ```
@@ -132,6 +172,28 @@ A kept gap goes to `ksp/lion/unapproved/`. It moves to `approved/` when a
 person signs it off — the folder is the state, so there is no status column to
 keep in step.
 
+### Nothing enters the stores without a yes
+
+Show what you are about to write, and wait for them to say yes.
+
+This does not replace the rule above; both hold. **Being asked to file
+something is permission to do the work, not approval of the result.** What
+needs approving is the metadata you worked out — you inferred it, and once it
+is written every later analysis reads it as evidence.
+
+Before writing anything into `ksp/`, show:
+
+- the exact rows — LAB, and any LEAD actor and authorship rows
+- every field you left blank, and why it is blank
+- anything the controlled vocabulary could not express
+- for a document, the filename you propose
+
+Then wait. An explicit yes, not an inferred one — "file this" earlier in the
+conversation is a request, not a confirmation.
+
+This covers all three stores. A gap kept in `ksp/lion/unapproved/` gets the
+same treatment: show the filename and the six sections first.
+
 ---
 
 ## Working on this repo
@@ -172,6 +234,8 @@ Decided deliberately. Adding features to solve them makes the system worse.
 | The one implemented gap analysis is the weakest of the 16 | It is the only one the current fields support. Section 1 disclosure is the mitigation. |
 | Triage ranks on keyword cues, not meaning | It is a shortlist, not a decision. The agent routes; cues only surface candidates. |
 | A tagged actor is weaker evidence than a document-backed one | True, and why the buckets stay separate. Merging them would overstate the response side. |
+| The same question gets a differently-worded answer for different people | Register adapts to the reader by design. What it must say does not. |
+| Filing takes an extra round trip | The confirmation is the point. Metadata written without review reads as evidence later. |
 
 ### Out of scope — do not build
 

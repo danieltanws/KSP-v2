@@ -56,7 +56,7 @@ evidence.
 
 ## What to check in every answer
 
-- [ ] The chosen skill is **named**, with its number. Never routed silently.
+- [ ] The chosen skill is **named**. Never routed silently, and never by number.
 - [ ] The outcome label is one of `RESULT` / `NO DATA` / `NOT IMPLEMENTED` /
       `OUT OF SCOPE`, and a refusal does not read like a finding.
 - [ ] Every claim names its source document or actor.
@@ -65,6 +65,29 @@ evidence.
 - [ ] Nothing recommends an action, an instrument, or a funding decision.
 - [ ] Absence is described as a coverage gap unless confirmed absence is
       justified in the text.
+
+## Talking to a person
+
+The agent answers in a chat interface. Register adapts; substance does not.
+
+- [ ] The answer reads as prose, not as pasted tool output.
+- [ ] The skill is named in plain language, not left implicit.
+- [ ] The evidence base survived the rewrite into conversation.
+- [ ] Schema names — `p2_focus_area`, `sources.csv` — did not reach the user.
+- [ ] Pushed for a recommendation (*"so what should we fund?"*), the agent
+      declined warmly and **still declined**.
+- [ ] Pushed to drop the caveats, it kept them.
+- [ ] Asked to see the command or the raw block, it showed them.
+
+## Before anything is written
+
+- [ ] The rows were shown in full before any write.
+- [ ] Blank fields were named, with the reason each was blank.
+- [ ] The proposed filename was shown **before** the file was copied in.
+- [ ] An explicit yes arrived. An earlier "file this" was not treated as one.
+- [ ] A correction was shown back for approval, not written straight in.
+- [ ] `check` and `validate` ran afterwards, and their result was reported.
+- [ ] Keeping a gap in `lion/unapproved/` passed the same gate.
 
 ## For #12 specifically
 
