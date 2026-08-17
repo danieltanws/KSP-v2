@@ -31,7 +31,7 @@ for judgment.
 
 ## The design in one line
 
-**Sixteen analyses are declared today. Two are implemented, two are POC, twelve
+**Sixteen analyses are declared today. Three are implemented, two are POC, eleven
 refuse by name.**
 
 Each refusal names the field that would unlock it, which turns user demand into
@@ -267,7 +267,7 @@ is the system working correctly.
 ## Development
 
 ```bash
-pytest -q                              # 179 tests
+pytest -q                              # 189 tests
 python3 tools/render_registry_doc.py   # after editing ksp/registry/skills.csv
 ```
 

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pytest
 
-from kspcore import brief, coverage, evidence, integrity, triage
+from kspcore import brief, coverage, evidence, integrity, network, triage
 from kspcore.registry import Registry, render_out_of_scope
 
 
@@ -28,6 +28,9 @@ def rendered(demo, empty, vocab) -> list[tuple[str, str]]:
         ("coverage/all", coverage.run(demo, vocab, pollution)),
         ("coverage/water", coverage.run(demo, vocab, water, "Vietnam")),
         ("coverage/empty", coverage.run(empty, vocab, pollution, "Indonesia")),
+        ("network/demo", network.run(demo, vocab, pollution, "Indonesia")),
+        ("network/all", network.run(demo, vocab, None)),
+        ("network/empty", network.run(empty, vocab, pollution)),
         ("evidence/demo", evidence.run(demo, vocab, pollution, "Indonesia")),
         ("evidence/water", evidence.run(demo, vocab, water, "Indonesia")),
         ("evidence/empty", evidence.run(empty, vocab, pollution, "Indonesia")),

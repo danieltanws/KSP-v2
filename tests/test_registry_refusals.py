@@ -1,7 +1,7 @@
 """The registry, and the refusals that are the point of it.
 
-All sixteen analyses are declared. Two are implemented, two are POC
-placeholders, twelve must fail loudly. An unimplemented skill that quietly
+All sixteen analyses are declared. Three are implemented, two are POC
+placeholders, eleven must fail loudly. An unimplemented skill that quietly
 answers with a different analysis is the failure mode the whole system is
 designed against (PRD 0).
 """
@@ -32,7 +32,6 @@ CATALOGUE_NAMES = {
 
 # PRD 6.2 - the field each refusal must name.
 MISSING_FIELDS = {
-    3: "Code execution + author-count weighting",
     4: "Commitment identification on LAB",
     5: "Stated quantity field on LAB",
     7: "Actor type populated in LEAD",
@@ -46,7 +45,7 @@ MISSING_FIELDS = {
 
 DEFERRED = {2, 10}
 POC_SKILLS = {6, 9}
-IMPLEMENTED_SKILLS = {1, 12}
+IMPLEMENTED_SKILLS = {1, 3, 12}
 AVAILABLE = POC_SKILLS | IMPLEMENTED_SKILLS
 
 
@@ -63,7 +62,7 @@ def test_numbering_and_names_match_the_catalogue(registry):
     assert {s.number: s.name for s in registry.skills} == CATALOGUE_NAMES
 
 
-def test_exactly_two_are_implemented(registry):
+def test_exactly_the_declared_set_is_implemented(registry):
     assert [s.number for s in registry.implemented()] == sorted(IMPLEMENTED_SKILLS)
 
 
@@ -144,7 +143,8 @@ def test_every_refusal_points_at_the_implemented_alternatives(registry):
 
 def test_no_refusal_ever_offers_an_unimplemented_skill(registry):
     for skill in registry.skills:
-        assert set(skill.relevant_implemented) <= {1, 12}
+        implemented = {s.number for s in registry.implemented()}
+        assert set(skill.relevant_implemented) <= implemented
 
 
 def test_the_four_outcomes_are_distinct(registry):
