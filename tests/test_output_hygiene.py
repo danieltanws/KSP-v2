@@ -51,8 +51,15 @@ def rendered(demo, empty, vocab) -> list[tuple[str, str]]:
 
 
 def test_the_word_opportunity_never_appears(rendered):
-    """PRD 6.5 rule 5. In a deck it reads as a fundable thing, and the meeting
-    goes on that instead of the work. Use gap or candidate."""
+    """PRD 6.5 rule 5, agent half.
+
+    The rule is stage-naming, not a ban on the word: a person may write
+    "opportunity" once they have judged a gap, and `lion/approved/` is that
+    line. Everything rendered here is agent-computed and pre-review, so the
+    word is always wrong in it — a gap is a hole in what we have read, not a
+    fundable thing. Do not widen this into a repo-wide ban; the destination
+    store is *Levers, Innovations, Opportunities and Nexus*.
+    """
     for where, text in rendered:
         assert "opportunit" not in text.lower(), f"{where} used a banned word"
 
@@ -101,3 +108,16 @@ def test_thin_evidence_is_disclosed_rather_than_withheld(demo, vocab):
     text = coverage.run(demo, vocab, theme, "Vietnam")
     assert "NO DATA" not in text, "a handful of documents is thin, but it is not no data"
     assert f"LAB documents          {held}" in text
+
+
+def test_no_skill_numbers_reach_a_reader(rendered):
+    """`#12` reads as a rank or a priority to someone who does not have the
+    catalogue in front of them. Registry indices stay internal; the registry
+    listing itself is exempt, because there the number IS the index."""
+    import re
+
+    for where, text in rendered:
+        if where in ("registry",):
+            continue
+        hits = re.findall(r"#\d+", text)
+        assert hits == [], f"{where} exposed a skill number: {hits}"

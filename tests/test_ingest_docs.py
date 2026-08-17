@@ -82,11 +82,13 @@ def test_every_column_is_documented(spec, relative):
         assert f"`{column}`" in spec, f"{relative}: column '{column}' is undocumented"
 
 
-def test_the_stores_ship_empty(spec):
-    """The spec tells an external agent to fill these. They must start empty."""
+def test_every_store_file_exists_with_its_header(spec):
+    """The spec tells an external agent to fill these, so they must exist and
+    carry the header it documents - whether or not they hold rows yet."""
     for relative in ("lab/sources.csv", "lead/actors.csv", "lead/authorship.csv"):
-        lines = (repo_root() / "ksp" / relative).read_text(encoding="utf-8").splitlines()
-        assert len(lines) == 1, f"{relative} has data in it; the real store ships empty"
+        path = repo_root() / "ksp" / relative
+        assert path.is_file(), f"{relative} is missing"
+        assert path.read_text(encoding="utf-8").splitlines()[0].count(",") > 1
 
 
 # -- the values document matches the vocabularies --------------------------

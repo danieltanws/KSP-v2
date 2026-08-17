@@ -234,3 +234,30 @@ Also dropped: `Signal Type`, `Time Horizon`, `Why It Matters`, `Watch For`. The
 first is a different axis from `source_type`; `Time Horizon` is forecasting,
 which the PRD refuses on principle; the last two are interpretation the system
 is designed not to store.
+
+---
+
+# Deferred: decision criteria
+
+An intended feature, not in the POC. Business teams judge what is worth
+pursuing against their own criteria, and the platform should be able to encode
+them so an output can be assessed rather than just read.
+
+The shape is undecided and can be settled later. **One requirement is fixed
+now: any score must be an objective metric — computed from a stored field.**
+
+Not inferred by the agent at read time. A number carries more authority than
+prose, and a reader cannot tell by looking where it came from, so a score the
+agent arrives at by reading is the most dangerous output form in the system:
+confident, precise, and backed by nothing. Prose at least shows its reasoning.
+
+This gives a clear test for any criterion proposed later — **name the field it
+computes from.** If there is no such field, either add it first, or ship the
+criterion labelled improvised in the way POC skills are, so the distinction
+survives into the output.
+
+Left open: whether criteria **filter**, **sort**, or **disclose**. Hard rule 6
+bears on this. The system never withholds a result for thin evidence — it
+produces it and discloses the evidence base — so a criterion that suppressed
+candidates below a bar would be the first thing in the system to break that
+rule. Sorting and disclosing do not.

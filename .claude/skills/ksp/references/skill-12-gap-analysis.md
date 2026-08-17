@@ -110,9 +110,12 @@ but without reasoning, so they cannot be misread as findings.
 
 ## State this limitation in the output
 
-#12 is the **lowest-trust** candidate type in the catalogue: the one most
-likely to reflect thin reading rather than real absence, and the one users find
-most convincing. That combination is the main risk in the whole system.
+Gap analysis is the **lowest-trust** candidate type in the catalogue: the one
+most likely to reflect thin reading rather than real absence, and the one users
+find most convincing. That combination is the main risk in the whole system.
+
+Write it that way — by name. Do not restate it as `#12`; the reader has no
+catalogue to resolve the number against.
 
 It is implemented first only because it is the only one the current fields
 support. **Section 1 is not optional for this reason.**

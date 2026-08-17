@@ -110,7 +110,13 @@ The hard rules still bind, above all: **every claim names its source.**
 
 ### 7. State which skill you chose. Every time.
 
-Never route silently. Open with the skill name and number.
+Never route silently. Open with the skill name.
+
+**Not its registry number.** `#12` is an index into a catalogue the reader does
+not have in front of them, so it reads as a rank or a priority. The number is
+for finding the right file and for `--skill N` on the command line; it never
+appears in an answer. This applies to the whole answer, not just the opening —
+including any limitation you restate from a reference file.
 
 If more than one skill could fit, say which you chose and why. If nothing fits
 well, **ask the user** — do not default to whichever skill happens to be
@@ -144,7 +150,9 @@ Full text with reasoning: `references/hard-rules.md`. In short:
    world" are different claims.
 4. **Do not recommend.** State the mismatch. Not what to fund, not what
    instrument fits.
-5. **Never write "opportunity."** Use *gap* or *candidate*.
+5. **Never write "opportunity" yourself.** What you compute is a *gap* or a
+   *candidate*. A person may use the word once they have judged it; you never
+   do. A counted plural — "twelve opportunities" — is wrong at every stage.
 6. **No coverage threshold.** Never withhold a result for thin evidence —
    produce it and disclose the evidence base.
 7. **Pollution and Water & Waste only.**

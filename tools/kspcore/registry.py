@@ -115,8 +115,8 @@ class Registry:
         return [s for s in self.skills if s.available]
 
     def label(self, number: int) -> str:
-        skill = self.get(number)
-        return f"{skill.name} (#{skill.number})"
+        """Reader-facing name. No registry number - it looks like a rank."""
+        return self.get(number).name
 
     # -- rendering ---------------------------------------------------------
 
@@ -222,7 +222,7 @@ class Registry:
                 f"Skill #{number} ({skill.name}) is {how} - run it, do not refuse it"
             )
 
-        lines = [f"{NOT_IMPLEMENTED} — {skill.name} (#{skill.number})", ""]
+        lines = [f"{NOT_IMPLEMENTED} — {skill.name}", ""]
         lines.append(skill.summary)
         lines.append("")
 

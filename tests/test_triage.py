@@ -65,7 +65,7 @@ def test_cues_match_on_word_boundaries(registry):
 
 def test_blocked_top_match_is_named_with_its_blocker(registry):
     text = triage.run(registry, "is the funding response the right size for clean cooking?")
-    assert "#5 Scale mismatch, and it is blocked" in text
+    assert "Closest match is Scale mismatch, and it is blocked" in text
     assert "Stated quantity field on LAB" in text
 
 
@@ -114,7 +114,7 @@ def test_no_match_asks_rather_than_defaulting(registry):
 def test_poc_candidates_are_marked_as_poc(registry, question, number):
     text = triage.run(registry, question)
     assert "READY (POC)" in text
-    assert f"#{number} is a POC skill" in text
+    assert f"{registry.get(number).name} is a POC skill" in text
     assert registry.get(number).missing_field in text
 
 

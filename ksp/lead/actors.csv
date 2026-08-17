@@ -1,1 +1,13 @@
 id,name,form,actor_type,affiliation_id,source_files,pillar,p1_cluster,p2_focus_area,geography,origin,basis,date_added
+1,World Bank Group,Organisation,Funder,,WBG_Water_Strategy_FY25-30.pdf;WBG_Water_Strategy_Implementation_Plan.pdf,PLANET,Urban Liveability,Water & Waste,Global,From LAB,,2026-08-16
+2,Asian Development Bank,Organisation,Funder,,ADB_Water_Resilience_Asia_Pacific_Guidance_Note.pdf,PLANET,Urban Liveability,Water & Waste,Southeast Asia;South Asia;East Asia;Central Asia;Oceania,From LAB,,2026-08-16
+3,World Resources Institute,Organisation,Researcher,,WRI_Aqueduct_4_Water_Risk_Indicators.pdf,PLANET,Urban Liveability,Water & Waste,Global,From LAB,,2026-08-16
+4,Utrecht University,Organisation,Researcher,,,,,,Global,Manual,Named as author affiliation in WRI_Aqueduct_4_Water_Risk_Indicators.pdf,2026-08-16
+5,Bluerisk,Organisation,Other,,,,,,Global,Manual,Named as author affiliation in WRI_Aqueduct_4_Water_Risk_Indicators.pdf,2026-08-16
+6,Samantha Kuzma,Person,Researcher,3,WRI_Aqueduct_4_Water_Risk_Indicators.pdf,PLANET,Urban Liveability,Water & Waste,Global,From LAB,,2026-08-16
+7,Marc F. P. Bierkens,Person,Researcher,4,WRI_Aqueduct_4_Water_Risk_Indicators.pdf,PLANET,Urban Liveability,Water & Waste,Global,From LAB,,2026-08-16
+8,Shivani Lakshman,Person,Researcher,3,WRI_Aqueduct_4_Water_Risk_Indicators.pdf,PLANET,Urban Liveability,Water & Waste,Global,From LAB,,2026-08-16
+9,Tianyi Luo,Person,Researcher,5,WRI_Aqueduct_4_Water_Risk_Indicators.pdf,PLANET,Urban Liveability,Water & Waste,Global,From LAB,,2026-08-16
+10,Liz Saccoccia,Person,Researcher,3,WRI_Aqueduct_4_Water_Risk_Indicators.pdf,PLANET,Urban Liveability,Water & Waste,Global,From LAB,,2026-08-16
+11,Edwin H. Sutanudjaja,Person,Researcher,4,WRI_Aqueduct_4_Water_Risk_Indicators.pdf,PLANET,Urban Liveability,Water & Waste,Global,From LAB,,2026-08-16
+12,Rens van Beek,Person,Researcher,4,WRI_Aqueduct_4_Water_Risk_Indicators.pdf,PLANET,Urban Liveability,Water & Waste,Global,From LAB,,2026-08-16

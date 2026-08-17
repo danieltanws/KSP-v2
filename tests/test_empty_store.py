@@ -37,22 +37,36 @@ def run_cli(store: Path, *args) -> subprocess.CompletedProcess:
     )
 
 
-# -- the shipped state ------------------------------------------------------
+# -- the real store, whatever it holds --------------------------------------
+#
+# The real store started empty and fills up as documents are filed, so its row
+# count is not something to assert. What must hold at every size is that it is
+# internally consistent: every row opens, and every value is one the
+# vocabularies allow.
 
 
-def test_the_real_store_is_empty():
-    """If this fails, someone has put data in ksp/. Test data belongs in tests."""
-    for relative in ("lab/sources.csv", "lead/actors.csv", "lead/authorship.csv"):
-        lines = (ROOT / "ksp" / relative).read_text(encoding="utf-8").splitlines()
-        assert len(lines) == 1, f"{relative} has rows; the real store ships empty"
+def test_the_real_store_passes_its_integrity_check():
+    from kspcore.store import Store
+
+    report = integrity.check(Store.load(ROOT / "ksp"))
+    assert report.ok, report.render()
 
 
-def test_no_documents_are_filed_in_the_real_store():
-    files = [
-        p.name for p in (ROOT / "ksp" / "lab" / "documents").iterdir()
-        if p.is_file() and p.name not in integrity.IGNORED_FILES
-    ]
-    assert files == [], f"unexpected documents in the real store: {files}"
+def test_the_real_store_validates():
+    from kspcore.store import Store
+    from kspcore.vocab import Vocab, validate
+
+    problems = validate(Store.load(ROOT / "ksp"), Vocab.load(ROOT / "ksp" / "vocab"))
+    errors = [str(p) for p in problems if p.level == "error"]
+    assert errors == [], "\n".join(errors)
+
+
+def test_every_filed_document_has_a_row():
+    """The reverse of the integrity check: a file nobody filed is invisible to
+    every query, which surfaces as thin evidence rather than as an error."""
+    from kspcore.store import Store
+
+    assert integrity.check(Store.load(ROOT / "ksp")).unfiled == []
 
 
 # -- integrity and validation ----------------------------------------------

@@ -31,16 +31,23 @@ for judgment.
 
 ## The design in one line
 
-**Sixteen analyses are declared. Two are implemented, two are POC, twelve refuse
-by name.**
+**Sixteen analyses are declared today. Two are implemented, two are POC, twelve
+refuse by name.**
 
 Each refusal names the field that would unlock it, which turns user demand into
 a build roadmap: what people keep asking for is what to build next.
 
+Sixteen is the list as it stands, not a ceiling — a new question that needs a
+new method gets a new row. The constraint that does not move is that the agent
+runs **only what has been declared**. It never invents a method to fit a
+question. A seventeenth analysis takes a number past
+`docs/KSP_Analysis_Catalogue.md`, which is expected: the catalogue records the
+original sixteen, and the registry is the live list.
+
 ```
 $ python3 tools/ksp.py refuse 5
 
-NOT IMPLEMENTED — Scale mismatch (#5)
+NOT IMPLEMENTED — Scale mismatch
 
 A documented need and a documented response that differ by orders of magnitude.
 
@@ -50,8 +57,13 @@ The only candidate type that does not depend on absence.
 Caveat if it is built: The two numbers usually come from different sources with
 different scopes. Report the mismatch, never the multiple.
 
-Implemented skills that may be relevant: Coverage check (#1), Gap analysis (#12).
+Implemented skills that may be relevant: Coverage check, Gap analysis.
 ```
+
+Skills are named, never numbered, in anything a reader sees. The registry
+number is an index into a catalogue they do not have, so it reads as a rank.
+It survives only where it is genuinely an index: `ksp.py registry`, `refuse 5`,
+`--skill 9`.
 
 ---
 
@@ -64,10 +76,13 @@ $ python3 tools/ksp.py triage "could the Vietnam kiosk model work in Indonesia?"
 
 ROUTING — "could the Vietnam kiosk model work in Indonesia?"
 
-  ← #9   Transferability  READY (POC)
+  ← Transferability  READY (POC)
         matched: work in
 
 Nothing has been run.
+
+Closest match is Transferability. To run it:
+    ksp.py brief --skill 9 --theme "<theme>" --geography "<geography>"
 ```
 
 If the closest match is **blocked**, that is the answer — the analyses below it
@@ -205,6 +220,7 @@ tools/ksp.py                check · validate · registry · refuse · triage ·
                             coverage · evidence · brief
 .claude/skills/ksp/         the routing agent
 .claude/skills/ksp/analyses/  one prompt file per POC skill
+.claude/skills/ksp-file/    filing skill - a document's LAB metadata
 docs/                       specifications; KSP_POC_PRD.md governs
 outputs/                    what this agent produces - INGEST_SPEC.md and
                             CONTROLLED_VALUES.md for bulk loading
@@ -220,13 +236,17 @@ tests/                      pytest; test stores are built in conftest.py,
 |---|---|---|---|
 | **LAB** | Landscapes, Assessments and Beyond — a file, with labels attached | Read it | Unstructured |
 | **LEAD** | Leaders, Experts, Advocates and Doers — rows of fields, no file underneath | Compute over it | Structured |
-| **LION** | Levers, Innovations, Opportunities and Nexus | — | **Not built.** It defines the *shape of the agent's output*, not a store. |
+| **LION** | Levers, Innovations, Opportunities and Nexus — gaps kept for review | Judge it | Markdown, one file per gap |
 
 The asymmetry between LAB and LEAD is deliberate, not an inconsistency to tidy
 up. LAB answers *"what do we know about air pollution"* — the agent finds
 documents and a person reads them. LEAD answers *"who works on this"* —
 counting, grouping and following links, which only works if the facts sit in
 fields.
+
+**LAB and LEAD are inputs; LION is an output.** Nothing reads LION — it is
+where a gap goes once someone asks to keep it, and it moves from `unapproved/`
+to `approved/` when a person signs it off.
 
 ---
 
@@ -245,13 +265,14 @@ Read these before quoting any output.
 - **LEAD skews to researchers.** Authors are researchers. Implementers and
   funders rarely publish, so every field looks research-heavy whether or not it
   is.
-- **A POC skill's answer is improvised.** #6 and #9 have no stored field behind
-  them; the agent invents the method by reading. Check the `Not stored` line in
-  the evidence base before quoting either.
-- **The implemented gap analysis (#12) is the weakest of the sixteen** — the
-  one most likely to reflect thin reading, and the one readers find most
-  convincing. It is implemented first only because it is the only one the
-  current fields support.
+- **A POC skill's answer is improvised.** Proven but unscaled and
+  Transferability have no stored field behind them; the agent invents the
+  method by reading. Check the `Not stored` line in the evidence base before
+  quoting either.
+- **The implemented gap analysis is the weakest of the sixteen** — the one most
+  likely to reflect thin reading, and the one readers find most convincing. It
+  is implemented first only because it is the only one the current fields
+  support.
 - **Classification is not stable between runs.** There is no stored
   problem/response field, so the same question may sort documents differently
   on different days. Disclosure is the mitigation, by design.
@@ -265,7 +286,7 @@ is the system working correctly.
 ## Development
 
 ```bash
-pytest -q                              # 164 tests
+pytest -q                              # 205 tests
 python3 tools/render_registry_doc.py   # after editing ksp/registry/skills.csv
 python3 tools/render_vocab_doc.py      # after editing anything in ksp/vocab/
 ```
