@@ -1,6 +1,6 @@
 # Skill registry
 
-**16 analyses declared. 2 implemented, 2 POC, 12 refuse by name.**
+**16 analyses declared. 3 implemented, 2 POC, 11 refuse by name.**
 
 Numbering matches `docs/KSP_Analysis_Catalogue.md`.
 
@@ -11,7 +11,7 @@ Numbering matches `docs/KSP_Analysis_Catalogue.md`.
 |---|---|---|---|
 | 1 | **Coverage check** | **IMPLEMENTED** | — |
 | 2 | Adjacent actors | NOT IMPLEMENTED | *buildable, not yet built* |
-| 3 | Network position | NOT IMPLEMENTED | Code execution + author-count weighting |
+| 3 | **Network position** | **IMPLEMENTED** | — |
 | 4 | Policy-implementation gap | NOT IMPLEMENTED | Commitment identification on LAB |
 | 5 | Scale mismatch | NOT IMPLEMENTED | Stated quantity field on LAB |
 | 6 | **Proven but unscaled** | **POC** | Solution maturity field on LAB |
@@ -36,7 +36,7 @@ the method itself, so its output is improvised rather than computed. The
 **Adding one is dropping in a file** named `NN-slug.md` and setting the status
 cell in `ksp/registry/skills.csv` to `POC`. No code change.
 
-## Why the 12 refuse
+## Why the 11 refuse
 
 Each refusal names the field that would unlock it. That turns user demand
 into a build roadmap: what people keep asking for is what to build next.

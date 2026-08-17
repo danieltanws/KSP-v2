@@ -125,11 +125,16 @@ def render(registry: Registry, question: str, candidates: list[Candidate]) -> st
     return "\n".join(lines)
 
 
+#: An implemented skill has its own command. Only a POC skill goes through
+#: ``brief``, which is the generic gatherer - pointing an implemented skill at
+#: it would run the wrong thing under the right name.
+IMPLEMENTED_COMMANDS = {1: "coverage", 3: "network", 12: "evidence"}
+
+
 def _command(skill: Skill) -> str:
-    if skill.number == 1:
-        return 'ksp.py coverage --theme "<theme>" --geography "<geography>"'
-    if skill.number == 12:
-        return 'ksp.py evidence --theme "<theme>" --geography "<geography>"'
+    verb = IMPLEMENTED_COMMANDS.get(skill.number)
+    if verb:
+        return f'ksp.py {verb} --theme "<theme>" --geography "<geography>"'
     return f'ksp.py brief --skill {skill.number} --theme "<theme>" --geography "<geography>"'
 
 
