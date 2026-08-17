@@ -150,23 +150,6 @@ it chose, and runs it or refuses.
 
 ---
 
-## Bulk ingest
-
-Populating the stores from an existing document repository — by hand or with
-another agent — needs two documents, handed over together:
-
-| Document | What it is |
-|---|---|
-| `outputs/INGEST_SPEC.md` | Column-by-column spec for all three CSVs, the rules, and a pre-handover checklist |
-| `outputs/CONTROLLED_VALUES.md` | Every permitted value. Generated from `ksp/vocab/`, so it cannot drift |
-
-Both are written to be read without any other context. Validate the result with
-`ksp.py validate` and `ksp.py check` before accepting it.
-
-**The one thing to settle first:** documents must be copied into
-`ksp/lab/documents/`, and filenames must be unique store-wide and final. A LAB
-row is joined to its file by filename and nothing else.
-
 ## Filing a document
 
 1. Put the file in `ksp/lab/documents/`.
@@ -222,8 +205,6 @@ tools/ksp.py                check · validate · registry · refuse · triage ·
 .claude/skills/ksp/analyses/  one prompt file per POC skill
 .claude/skills/ksp-file/    filing skill - a document's LAB metadata
 docs/                       specifications; KSP_POC_PRD.md governs
-outputs/                    what this agent produces - INGEST_SPEC.md and
-                            CONTROLLED_VALUES.md for bulk loading
 tests/                      pytest; test stores are built in conftest.py,
                             never checked in
 ```
@@ -286,9 +267,8 @@ is the system working correctly.
 ## Development
 
 ```bash
-pytest -q                              # 205 tests
+pytest -q                              # 179 tests
 python3 tools/render_registry_doc.py   # after editing ksp/registry/skills.csv
-python3 tools/render_vocab_doc.py      # after editing anything in ksp/vocab/
 ```
 
 Contributor notes, accepted costs, and the do-not-build list are in

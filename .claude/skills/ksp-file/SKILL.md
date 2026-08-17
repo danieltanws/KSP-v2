@@ -40,7 +40,7 @@ total_author_count,date_added
 Required: `name`, `file`, `record_type`, `description`, `pillar`, `geography`,
 `source_type`, `publisher`.
 
-Permitted values for every controlled field: **`outputs/CONTROLLED_VALUES.md`**.
+Permitted values for every controlled field: the lists in **`ksp/vocab/`**.
 
 | Field | How to decide it |
 |---|---|
