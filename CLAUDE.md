@@ -104,8 +104,6 @@ ksp/registry/skills.csv   the 16 declarations
 tools/ksp.py              CLI - check, validate, registry, refuse, triage,
                           coverage, evidence, brief
 docs/                     the specifications; two are normative
-outputs/                  what this agent produces - INGEST_SPEC.md is the
-                          handover doc for bulk loading
 tests/                    pytest, plus fixture stores
 ```
 
@@ -114,14 +112,16 @@ tests/                    pytest, plus fixture stores
 
 ### Where things go
 
-Every file this agent creates has one of three homes. Route by what the file
-**is**, not by what produced it.
+Two homes. Route by what the file **is**, not by what produced it.
 
 | Folder | Holds |
 |---|---|
 | `docs/` | Documentation about this system, for whoever maintains it |
 | `ksp/` | The stores — LAB, LEAD, LION |
-| **`outputs/`** | Everything else |
+
+**Anything that fits neither, ask where it should go.** There is no default
+home for a one-off file. A catch-all folder invites writing to it, and what
+collects there is a log of everything anyone tried.
 
 **Write a file only when asked.** Answering a question does not produce one.
 This still holds now that `ksp/lion/` exists: a gap is kept because someone
@@ -138,13 +138,12 @@ keep in step.
 
 - **Python: standard library only.** The stores are CSV so they open in a
   spreadsheet; the tooling should run anywhere with no install step.
-- **Tests:** `pytest -q` from the repo root. 205 tests, all fast.
+- **Tests:** `pytest -q` from the repo root. 179 tests, all fast.
 - **After editing `ksp/registry/skills.csv`,** run
   `python3 tools/render_registry_doc.py` — a test fails otherwise.
-- **After editing anything in `ksp/vocab/`,** run
-  `python3 tools/render_vocab_doc.py` — a test fails otherwise. The generated
-  `outputs/CONTROLLED_VALUES.md` is handed to external ingest agents, so it
-  must never disagree with the validator.
+- **`ksp/vocab/` is the only list of permitted values.** The validator reads it
+  directly. Nothing is generated from it, so there is no second copy to keep in
+  step.
 - **`ksp/` holds only real documents.** Test stores are built in
   `tests/conftest.py` into a temp directory — there is no checked-in store of
   fabricated documents, because one existed and was twice mistaken for real
