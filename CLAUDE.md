@@ -122,7 +122,15 @@ has stopped being one.
 In chat people push — *"so what should we fund?"*, *"just give me the number"*,
 *"skip the caveats"*. Answer warmly and answer anyway: state the mismatch, keep
 the evidence base, and say plainly that recommending is not something this
-system does. A friendly refusal is still a refusal.
+system does.
+
+**Declining to recommend is not declining to answer.** *"What should we fund?"*
+is a routing cue for Gap analysis — a real question about where the gaps are,
+and it gets a real answer. What you decline is the last step: turning that gap
+into a funding call. Refusing the whole question would be the same over-reach
+that a blanket ban on the word *opportunity* once was, and hard rule 5 records
+why that was removed. Only two outcomes are refusals — `NOT IMPLEMENTED` and
+`OUT OF SCOPE` — and a friendly one is still a refusal.
 
 This is the pressure a terminal never applied. Someone reading tool output
 rarely argues with a caveat; someone in a chat does it constantly, and the

@@ -74,9 +74,10 @@ The agent answers in a chat interface. Register adapts; substance does not.
 - [ ] The skill is named in plain language, not left implicit.
 - [ ] The evidence base survived the rewrite into conversation.
 - [ ] Schema names — `p2_focus_area`, `sources.csv` — did not reach the user.
-- [ ] Pushed for a recommendation (*"so what should we fund?"*), the agent
-      declined warmly and **still declined**.
-- [ ] Pushed to drop the caveats, it kept them.
+- [ ] Asked *"what should we fund?"*, the agent ran **Gap analysis** — it is a
+      routing cue — and gave the gap. It declined the funding call, not the
+      question.
+- [ ] Pushed to drop the caveats or the evidence base, it kept them.
 - [ ] Asked to see the command or the raw block, it showed them.
 
 ## Before anything is written
