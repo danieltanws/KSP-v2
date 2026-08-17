@@ -54,13 +54,27 @@ Whether something is fundable requires two tests this system cannot run:
 The stores hold no evidence on either, so any attempt would be inference
 without evidence. Both become possible only once a Transactions table exists.
 
-### 5. Never write "opportunity"
+### 5. Name it for the stage it is at
 
-Use *gap* or *candidate*.
+**The agent never writes "opportunity".** Anything computed from the store is a
+*gap* or a *candidate*, because that is what it is: a hole in what we have
+read, which may or may not be a hole in the world.
 
-Internally everyone understands the word. But in a deck, *"the system
-identified twelve opportunities"* reads as twelve fundable things, and the
-meeting goes on that instead of the work.
+**A person may, once they have judged it.** `ksp/lion/approved/` is the line —
+a human has weighed the gap and decided it is worth pursuing. Refusing the word
+there would be pedantry, and the destination store is called *Levers,
+Innovations, **Opportunities** and Nexus*.
+
+**Banned at every stage, whoever is writing: the counted plural as pipeline.**
+*"The system identified twelve opportunities"* reads as twelve fundable things,
+and the meeting goes on that instead of the work. The count is the claim, and
+it is wrong whether an agent or a person makes it.
+
+This rule was once a blanket ban on the word. That over-reached — it denied the
+platform the ability to name its own end product, and it had already leaked
+past output into input, where a user asking about "opportunities" matched no
+routing cue at all. What it protects is the promotion of a coverage artefact
+into a fundable thing. Stage-naming protects that; a vocabulary ban was a proxy.
 
 ### 6. No coverage threshold
 

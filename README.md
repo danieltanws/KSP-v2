@@ -31,11 +31,18 @@ for judgment.
 
 ## The design in one line
 
-**Sixteen analyses are declared. Two are implemented, two are POC, twelve refuse
-by name.**
+**Sixteen analyses are declared today. Two are implemented, two are POC, twelve
+refuse by name.**
 
 Each refusal names the field that would unlock it, which turns user demand into
 a build roadmap: what people keep asking for is what to build next.
+
+Sixteen is the list as it stands, not a ceiling — a new question that needs a
+new method gets a new row. The constraint that does not move is that the agent
+runs **only what has been declared**. It never invents a method to fit a
+question. A seventeenth analysis takes a number past
+`docs/KSP_Analysis_Catalogue.md`, which is expected: the catalogue records the
+original sixteen, and the registry is the live list.
 
 ```
 $ python3 tools/ksp.py refuse 5
@@ -229,13 +236,17 @@ tests/                      pytest; test stores are built in conftest.py,
 |---|---|---|---|
 | **LAB** | Landscapes, Assessments and Beyond — a file, with labels attached | Read it | Unstructured |
 | **LEAD** | Leaders, Experts, Advocates and Doers — rows of fields, no file underneath | Compute over it | Structured |
-| **LION** | Levers, Innovations, Opportunities and Nexus | — | **Not built.** It defines the *shape of the agent's output*, not a store. |
+| **LION** | Levers, Innovations, Opportunities and Nexus — gaps kept for review | Judge it | Markdown, one file per gap |
 
 The asymmetry between LAB and LEAD is deliberate, not an inconsistency to tidy
 up. LAB answers *"what do we know about air pollution"* — the agent finds
 documents and a person reads them. LEAD answers *"who works on this"* —
 counting, grouping and following links, which only works if the facts sit in
 fields.
+
+**LAB and LEAD are inputs; LION is an output.** Nothing reads LION — it is
+where a gap goes once someone asks to keep it, and it moves from `unapproved/`
+to `approved/` when a person signs it off.
 
 ---
 

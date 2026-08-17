@@ -51,8 +51,15 @@ def rendered(demo, empty, vocab) -> list[tuple[str, str]]:
 
 
 def test_the_word_opportunity_never_appears(rendered):
-    """PRD 6.5 rule 5. In a deck it reads as a fundable thing, and the meeting
-    goes on that instead of the work. Use gap or candidate."""
+    """PRD 6.5 rule 5, agent half.
+
+    The rule is stage-naming, not a ban on the word: a person may write
+    "opportunity" once they have judged a gap, and `lion/approved/` is that
+    line. Everything rendered here is agent-computed and pre-review, so the
+    word is always wrong in it — a gap is a hole in what we have read, not a
+    fundable thing. Do not widen this into a repo-wide ban; the destination
+    store is *Levers, Innovations, Opportunities and Nexus*.
+    """
     for where, text in rendered:
         assert "opportunit" not in text.lower(), f"{where} used a banned word"
 

@@ -13,8 +13,12 @@ of sixteen declared analyses and either runs it or refuses by name.
 
 ## The rule that governs everything
 
-**Sixteen analyses are declared. Two are implemented, two are POC, twelve must
-fail loudly.**
+**Sixteen analyses are declared today. Two are implemented, two are POC, twelve
+must fail loudly.**
+
+Sixteen is the current list, not a limit — the registry grows as new questions
+arrive. What never changes is that the agent runs **only what is declared** in
+`ksp/registry/skills.csv`. A method is never improvised at query time.
 
 If the right analysis is unavailable, refuse, name the missing field, and stop.
 Do not substitute a different analysis. Do not attempt it anyway.
@@ -22,7 +26,14 @@ Do not substitute a different analysis. Do not attempt it anyway.
 An unavailable skill that quietly answers with the wrong analysis is the
 failure mode this whole system is designed against.
 
-**Do not implement the twelve.** They depend on fields that do not exist.
+**Do not implement the twelve on your own initiative.** Each depends on a field
+that does not exist yet, and inventing one to unblock a question is the failure
+this rule exists to stop.
+
+They are not permanently closed. Each refusal names the field that would unlock
+it, and that list *is* the roadmap — what people keep asking for is what to
+build next. One gets built when someone decides to add its field, not when a
+question happens to want it. See *Adding or replacing a POC skill* below.
 
 ### The two POC skills
 
@@ -67,7 +78,9 @@ answer is that analysis and its blocker — never the next one down.
 2. Never merge LAB and LEAD into one voice — label each claim by store.
 3. Never state absence as fact. "Nothing in the store" ≠ "nothing in the world".
 4. Do not recommend. State the mismatch.
-5. Never write "opportunity". Use *gap* or *candidate*.
+5. Name it for its stage. The agent writes *gap* or *candidate*, never
+   "opportunity"; a person may once they have judged it, in `lion/approved/`.
+   A counted plural — "twelve opportunities" — is banned at every stage.
 6. No coverage threshold — produce the result and disclose the evidence base.
 7. Pollution and Water & Waste only.
 8. An empty store is not a finding. Return `NO DATA`, never silence.

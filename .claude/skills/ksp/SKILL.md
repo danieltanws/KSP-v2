@@ -150,7 +150,9 @@ Full text with reasoning: `references/hard-rules.md`. In short:
    world" are different claims.
 4. **Do not recommend.** State the mismatch. Not what to fund, not what
    instrument fits.
-5. **Never write "opportunity."** Use *gap* or *candidate*.
+5. **Never write "opportunity" yourself.** What you compute is a *gap* or a
+   *candidate*. A person may use the word once they have judged it; you never
+   do. A counted plural — "twelve opportunities" — is wrong at every stage.
 6. **No coverage threshold.** Never withhold a result for thin evidence —
    produce it and disclose the evidence base.
 7. **Pollution and Water & Waste only.**
